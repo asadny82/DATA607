@@ -11,7 +11,22 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r}
+#install.packages("tidyverse")
+#install.packages("DBI")
+#install.packages("odbc")
+#install.packages("RSQLite")
+#install.packages("dblyr")
+#install.packages("RMySQL")
+```
 
+
+```{r}
+library(DBI) 
+library(odbc)
+library(RSQLite)
+library(dbplyr)
+library(RMySQL)
+library(tidyverse)
 ```
 
 
@@ -27,16 +42,99 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r }
+```{r create dataframe  }
 
 major_data <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv")
 
 data
 
 ```
-```{r}
+```{r create dataframe}
 data <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/all-ages.csv")
+
+data
 ```
+
+
+```{r connect to the Azure sqldatabse server}
+
+library(odbc)
+
+# Creating connection
+
+
+mysqldbTBConn = dbConnect(RMySQL::MySQL(),
+                            dbname= 'md.asaduzzaman39',
+                            host= 'cunydata607sql.mysql.database.azure.com',
+                            port=3306,
+                            user='md.asaduzzaman39',
+                            password='c1706f410226ffca')
+dbListTables(mysqldbTBConn)
+
+
+```
+
+```{r fetch data from azure database}
+
+result = dbSendQuery(mysqldbTBConn,"select * from  customer_product")
+ 
+customerProduct <- fetch(result)
+
+print(customerProduct)
+
+```
+
+
+```{r normalized table in SQL}
+result = dbSendQuery(mysqldbTBConn,"select * from  customer")
+ 
+customer <- fetch(result)
+
+print(customer)
+```
+ 
+
+
+```{r normalized table in SQL}
+result = dbSendQuery(mysqldbTBConn,"select * from  product")
+ 
+Product <- fetch(result)
+
+print(Product)
+```
+
+```{r normalized table in SQL}
+result = dbSendQuery(mysqldbTBConn,"select * from  department")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+
+
+
+```{r}
+
+#  create datafram from other dataframe
+
+dataframe1 <- data[,c("Major_code","Major","Major_category","Total","Employed","Unemployed")]
+
+```
+
+```{r create atables in dataframe}
+table1<- table(dataframe1$Major_code, dataframe1$Major,dataframe1$Major_category)
+
+table1
+ 
+```
+
+```{r create atables in dataframe}
+
+table2 <- table(dataframe1$Total,dataframe1$Employed, dataframe1$Unemployed)
+ 
+table2
+```
+
 
 
 ```{r}
@@ -105,6 +203,8 @@ str_extract_all(Data , regex("(.).\\1.\\1"))
 Data <- c("applebccfdscbaelppa")
 str_extract_all(Data , regex("(.)(.)(.).*\\3\\2\\1"))
 ```
+
+
 Start and end with the same character.
 
 Start with ^ and end with*$ 
@@ -128,16 +228,3 @@ Contain one letter repeated in at least three places (e.g. "eleven" contains thr
 ```{r}
 str_view("eleven", "([A-Za-z]).*\\1.*\\1.")
 ```
-
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

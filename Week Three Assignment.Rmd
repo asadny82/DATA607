@@ -73,10 +73,34 @@ dbListTables(mysqldbTBConn)
 
 
 ```
+#create table product:
 
-```{r fetch data from azure database}
+CREATE TABLE `md.asaduzzaman39`.`product` (
+  `product_name` VARCHAR(45) NULL,
+  `manufacturer` VARCHAR(45) NULL,
+  `color` VARCHAR(45) NULL,
+  `price` INT NULL,
+  `model` VARCHAR(45) NULL,
+  `munber in stock` VARCHAR(45) NULL);
 
-result = dbSendQuery(mysqldbTBConn,"select * from  customer_product")
+insert into `md.asaduzzaman39`.`product` (
+  `product_name`,
+  `manufacturer`,
+  `color`,
+  `price` ,
+  `model` ,
+  `munber in stock`) values ('phone','apple','red, while,black','799','iphone 16, iphone 16 pro, iphone 16 pro max', 21);
+  
+
+Table that is not normalized:
+
+ 
+
+
+
+```{r Table that is not normalized:}
+
+result = dbSendQuery(mysqldbTBConn,"select * from  product")
  
 customerProduct <- fetch(result)
 
@@ -84,16 +108,74 @@ print(customerProduct)
 
 ```
 
+1NF:
 
-```{r normalized table in SQL}
-result = dbSendQuery(mysqldbTBConn,"select * from  customer")
+CREATE TABLE `md.asaduzzaman39`.`product` (
+ `product_id` INT NULL,
+  `product_name` VARCHAR(45) NULL,
+  `manufacturer` VARCHAR(45) NULL,
+  `color` VARCHAR(45) NULL,
+  `price` INT NULL,
+  `model` VARCHAR(45) NULL,
+  `munber in stock` VARCHAR(45) NULL);
+  
+multiple data in one row like color and model. Put it into separate rows:
+
+insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`,
+  `manufacturer`,
+  `color`,
+  `price` ,
+  `model` ,
+  `munber in stock`) values (111, 'phone','apple','red','799','iphone 16', 21);
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`,
+  `manufacturer`,
+  `color`,
+  `price` ,
+  `model` ,
+  `munber in stock`) values (111, 'phone','apple',' while','799',' iphone 16 pro', 21);
+insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`,
+  `manufacturer`,
+  `color`,
+  `price` ,
+  `model` ,
+  `munber in stock`) values (111, 'phone','apple','black','799','iphone 16 pro max', 21);
+
+
+```{r 1NF- normalized table in SQL}
+result = dbSendQuery(mysqldbTBConn,"select * from  product")
  
 customer <- fetch(result)
 
 print(customer)
 ```
+ # create table with PK:
  
-
+  CREATE TABLE `md.asaduzzaman39`.`product` (
+  `product_id` INT NOT NULL,
+  `product_name` VARCHAR(45) NULL,
+  `manufacturer` VARCHAR(45) NULL,
+  `color` VARCHAR(45) NULL,
+  `price` INT NULL,
+  `model` VARCHAR(45) NULL,
+  `munber in stock` VARCHAR(45) NULL,
+  PRIMARY KEY (`prouct_id`));
+ 
+# insert data into product:
+insert into `md.asaduzzaman39`.`product` (
+`product_id`,
+  `product_name`,
+  `manufacturer`,
+  `color`,
+  `price` ,
+  `model` ,
+  `munber in stock`) values (111,'phone','apple','red','799','iphone 16', 21);
+  
 
 ```{r normalized table in SQL}
 result = dbSendQuery(mysqldbTBConn,"select * from  product")
@@ -103,13 +185,223 @@ Product <- fetch(result)
 print(Product)
 ```
 
+# create separate table for different set of data.
+CREATE TABLE `md.asaduzzaman39`.`product` (
+  `product_id` INT NOT NULL,
+  `product_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`product_id`));
+  
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`) values (111, 'phone');
+insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`) values (112, 'phone');
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `product_name`) values (113, 'phone');
+
+
 ```{r normalized table in SQL}
-result = dbSendQuery(mysqldbTBConn,"select * from  department")
+result = dbSendQuery(mysqldbTBConn,"select * from product ")
  
 department <- fetch(result)
 
 print(department) 
 ```
+#create table model
+
+CREATE TABLE `md.asaduzzaman39`.`model` (
+  `model_id` INT NOT NULL,
+  `model_name` VARCHAR(45) NULL,
+  `price` INT NULL,
+  PRIMARY KEY (`model_id`));
+
+
+```{r fetch data from model}
+result = dbSendQuery(mysqldbTBConn,"select * from model ")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+
+
+# create table color:
+
+CREATE TABLE `md.asaduzzaman39`.`color` (
+  `color_id` INT NOT NULL,
+  `color_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`color_id`));
+  
+```{r fetch data from table color}
+
+result = dbSendQuery(mysqldbTBConn,"select * from color ")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+#Create table manufacturer
+
+CREATE TABLE `md.asaduzzaman39`.`manufacturer` (
+  `manufacturer_id` INT NOT NULL,
+  `manufacturer_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`manufacturer_id`));
+
+```{r}
+
+result = dbSendQuery(mysqldbTBConn,"select * from manufacturer")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+
+# create ralation betwwen tables PK and FK.
+
+ CREATE TABLE `md.asaduzzaman39`.`product` (
+  `product_id` INT NOT NULL,
+  `model_id` INT NULL,
+  `color_id` INT NULL,
+  `manufacturer_id` INT NULL,
+  `product_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`product_id`));
+  
+  #insert into table
+  
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+  `color_id`,
+  `manufacturer_id`,
+  `product_name`) values (111,101,222,1,'phone');
+  
+   
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+  `color_id`,
+  `manufacturer_id`,
+  `product_name`) values (112,102,223,1,'phone');
+  
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+  `color_id`,
+  `manufacturer_id`,
+  `product_name`) values (113,103,224,1,'phone');
+
+```{r create ralation betwwen tables PK an}
+result = dbSendQuery(mysqldbTBConn,"select * from product")
+ 
+department <- fetch(result)
+
+print(department) 
+
+```
+ 
+
+# Now move the color_id from the product table and create relation color table with model table.
+
+ CREATE TABLE `md.asaduzzaman39`.`product` (
+  `product_id` INT NOT NULL,
+  `model_id` INT NULL,
+  `manufacturer_id` INT NULL,
+  `product_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`product_id`));
+
+ 
+insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+   `manufacturer_id`,
+  `product_name`) values (111,101,1,'phone');
+  
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+   `manufacturer_id`,
+  `product_name`) values (112,102,1,'phone');
+  
+  insert into `md.asaduzzaman39`.`product` (
+  `product_id`,
+  `model_id`,
+	`manufacturer_id`,
+  `product_name`) values (113,103,1,'phone');
+  
+  # 
+  
+  
+```{r drop relation (color_id) betwwen product table and color table}
+
+result = dbSendQuery(mysqldbTBConn,"select * from product")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+# create relation between model table and color table
+
+INSERT INTO `md.asaduzzaman39`.`model` (`model_id`, `color_id`, `model_name`) VALUES ('101', '222', 'iphone16');
+INSERT INTO `md.asaduzzaman39`.`model` (`model_id`, `color_id`, `model_name`) VALUES ('102', '223', 'iphone16 pro');
+INSERT INTO `md.asaduzzaman39`.`model` (`model_id`, `color_id`, `model_name`) VALUES ('103', '224', 'iphone16 pro max');
+
+CREATE TABLE `md.asaduzzaman39`.`model` (
+  `model_id` INT NOT NULL,
+  `color_id` INT NOT NULL,
+  `model_name` VARCHAR(45) NULL,
+  `price` INT NULL,
+  PRIMARY KEY (`model_id`));
+  
+  
+```{r}
+
+result = dbSendQuery(mysqldbTBConn,"select * from model")
+ 
+department <- fetch(result)
+
+print(department) 
+```
+Note: product table have relation with model table and model table have relation color table. So, product table can create relation with color table through model table.
+
+
+#write join the all table together.
+
+
+
+```{r join all table }
+  
+  result = dbSendQuery(mysqldbTBConn,"select p.Product_id,p.product_name,m.model_id,m.model_name,m.price, m.price,f.manufacturer_id,f.manufacturer_name,c.color_id,c.color_name
+ from Product p join model m on p.model_id=m.model_id 
+ join  manufacturer f on p.manufacturer_id =f.manufacturer_id
+ join color c on m.color_id=c.color_id ")
+ 
+department <- fetch(result)
+
+print(department) 
+
+```
+ 
+
+
+
+
+
+ 
+`
+```{r}
+#install.packages("BiocManager") 
+#BiocManager::install("EBImage")
+library("EBImage")
+myImage = readImage("Screenshot.png")
+
+display(myImage,method ="raster") 
+```
+ 
+
+ 
+
 
 
 

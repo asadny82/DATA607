@@ -47,17 +47,8 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
+ 
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
@@ -162,7 +153,7 @@ data <- na.omit(data) %>%
 
 ```{r}
 Delays_data <- data %>%
-  select(airline_name, Delayed, flight, On_time) %>%
+  select(airline_name, flight, Delayed, On_time) %>%
   group_by(airline_name) %>%
   summarize(Delayed = sum(Delayed), Flight = sum(flight), Delay.Rate = sum(Delayed)/sum(flight))
 Delays_data
@@ -186,28 +177,11 @@ plot2 <- ggplot(data = Delays_data, aes(x=airline_name, y=Delayed, fill=airline_
 ggarrange(plot1,plot2)
  
 ```
+Conclusions: Overall Alaska  Airline had 3775 flights, and delayed rate is 13.3% and AM West Airline had 7225 flights,and delayed rate is 10.9% but We compare the flight's delay rate of the airline by destinations(cities). Alaska airline flights have better performence than AM West. So it is better to fly with Alaska airline's flight.
  
- descriptions of analysis, and conclusions:
  
-#create the vector 
-#create dataframe
-#write dataframe in .csv file
-#read the .csv file
 
-#connect to Azure database
 
-# read table's data from Azure database(table called airline_data)
-#used na.omit function to remove values
-# filled airline_name used previous values.
-# used gather function gather key pair values
-#used mutate function rename variable
-# used spread function spread the data
-#Calculate the deay rate.
-
-# select the airline_name, Delayed, flight, On_time.
-#group_by the airline_name.
-#  sum of Delayed data, flight, calculate Delay Rate
-# plot two  graphs to see the total flight by airline and delay rate by airline
 
 
 

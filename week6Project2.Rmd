@@ -2,7 +2,9 @@
 title: "project2"
 author: "Md Asaduzzaman"
 date: "2024-10-14"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -136,6 +138,11 @@ Industrial_dataset2
  
 ```
  
+```{r rename}
+Industrial_dataset2<- rename(Industrial_dataset2,  "year" = X)
+Industrial_dataset2
+```
+
 
 
 
@@ -170,17 +177,6 @@ head(Year_Data)
 
 
 
- 
-
-
-```{r}
-select_country <- select(Industrial_dataset_Year,year,United.States)
-
-select_country
-
-```
-
-
 ```{r}
 Labor_Force_data3 <- read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/Labor%20Force%20Statistics%20from%20the%20Current%20Population%20Survey.csv")
 
@@ -212,6 +208,7 @@ population_servey %>% rename_all(tolower) %>%
 subset_month<- subset(population_servey,Month=="Jan")
 subset_month
 ```
+
 ```{r}
 select_year<-select(population_servey,Year,population_servey_rate)
 select_year
@@ -221,21 +218,17 @@ select_year
 ```{r}
 bind_rows(Unemployment_dataset1,population_servey,Labor_Force_data3)
 ```
+
 ```{r}
 nrow(Unemployment_dataset1) == nrow(Industrial_dataset2)
 ```
 
 
-```{r}
-bind_cols(Unemployment_dataset1,Industrial_dataset2)
-
-```
-
 
 ```{r}
-Unemployment_dataset1 %>% 
-  cross_join(Industrial_dataset2)%>%
-  group_by(Year)
+#Unemployment_dataset1 %>% 
+  #cross_join(Industrial_dataset2)%>%
+  #group_by(Year)
 ```
  
 

@@ -1,0 +1,243 @@
+---
+title: "project2"
+author: "Md Asaduzzaman"
+date: "2024-10-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(ggplot2)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+ 
+**
+IS 607 – Project 2
+The goal of this assignment is to give you practice in preparing different datasets for downstream
+analysis work.
+Your task is to:
+
+(1) Choose any three of the “wide” datasets identified in the Week 6 Discussion items. (You may
+use your own dataset; please don’t use my Sample Post dataset, since that was used in your
+Week 6 assignment!) For each of the three chosen datasets:
+
+ Create a .CSV file (or optionally, a MySQL database!) that includes all of the information
+included in the dataset. You’re encouraged to use a “wide” structure similar to how the
+information appears in the discussion item, so that you can practice tidying and
+transformations as described below.
+
+ Read the information from your .CSV file into R, and use tidyr and dplyr as needed to
+tidy and transform your data. [Most of your grade will be based on this step!]
+ Perform the analysis requested in the discussion item.
+ Your code should be in an R Markdown file, posted to rpubs.com, and should include
+narrative descriptions of your data cleanup work, analysis, and conclusions.
+(2) Please include in your homework submission, for each of the three chosen datasets:
+ The URL to the .Rmd file in your GitHub repository, and
+ The URL for your rpubs.com web page
+```{r}
+
+```
+
+**
+
+```{r}
+Unemployment_dataset1<- read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/Unemployment%20Rate.csv", header=TRUE, sep=",")
+Unemployment_dataset1
+```
+
+ 
+
+ 
+
+```{r}
+glimpse(Unemployment_dataset1)
+```
+```{r}
+class(Unemployment_dataset1$ARG)
+```
+
+```{r}
+Unemployment_dataset1$ARG1 <- as.factor(Unemployment_dataset1$Australia)
+Unemployment_dataset1$ARG1
+```
+
+
+```{r}
+levels(Unemployment_dataset1$ARG1)
+```
+ 
+
+
+
+```{r}
+Unemployment_dataset1<-rename(Unemployment_dataset1, Year =X,ARG=Argentina,SWE=Sweden,US=United.States,KOR=Korea..Rep.,JPN=Japan,BRA=Brazil,CAN=Canada,MEX=Mexico,IRE=Ireland)
+
+```
+
+```{r}
+Unemployment_dataset1 <- select(Unemployment_dataset1,Year,ARG,SWE,US,KOR,JPN,BRA,CAN,MEX,IRE)
+Unemployment_dataset1
+```
+
+```{r}
+Unemployment_dataset1<- pivot_longer(Unemployment_dataset1,3:10, names_to = "country", values_to = "rate")
+Unemployment_dataset1
+
+ 
+```
+
+```{r}
+Unemployment_dataset1<-na.omit(Unemployment_dataset1)
+Unemployment_dataset1
+```
+ 
+
+
+
+```{r}
+head(Unemployment_dataset1)
+```
+```{r}
+Unemployment_dataset1_long <- gather(Unemployment_dataset1,Country,UnemploymentRate,-Year)
+head(Unemployment_dataset1_long)
+```
+ 
+```{r}
+select_country<- subset(Unemployment_dataset1_long, Country=="ARG")
+select_country
+```
+```{r}
+select_country<- subset(select_country, Country=="ARG")
+select_country
+```
+
+
+
+ 
+ 
+
+```{r}
+Industrial_dataset2<- read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/Industrial%20Production.csv", header=TRUE, sep=",")
+
+Industrial_dataset2
+ 
+```
+ 
+
+
+
+```{r}
+head(Industrial_dataset2,5)
+```
+
+```{r}
+colnames(Industrial_dataset2) <-c("Year","Advanced.Economies","Argentina","Australia","Austria","Belgium","Bulgaria","Bahrain","Belarus","Brazil","Canada","Switzerland","Chile","China","Colombia","Cyprus","Czech.Republic","Germany","Denmark","Dominican.Republic","Algeria","EMDE.East.Asia_Pacific","EMDE.Europe_Central.Asia","Ecuador","Egypt_Arab.Rep.","Emerging.Market.Developing.Economies","Spain","Estonia","Finland","France","United.Kingdom","Greece","High.Income.Countries#HIC","Hong.Kong.SAR_China","Croatia","Hungary","India","Ireland","Iceland","Israel","Italy","Jordan","Japan","Kazakhstan","Korea.Rep.","EMDE.Latin.America_Caribbean","Low.Income.Countries#LIC","Sri.Lanka","Lithuania","Luxembourg","Latvia","Morocco","Moldova.Rep.","Mexico","Middle.Income.Countries#MIC","North.Macedonia","Malta","EMDE.MiddleEast_N.Africa","Netherlands","Norway","New.Zealand","Pakistan","Peru","Philippines","Poland","Portugal","Romania","Russian.Federation","EDE.South.Asia","Saudi.Arabia","Singapore","EMDE.Sub-Saharan.Africa","Slovakia","Slovenia","Sweden","Thailand","Tunisia","Turkey","Taiwan_China","Uruguay","United States","Venezuela_ RB","Vietnam","World^WBG.members","South Africa")
+
+Industrial_dataset2
+```
+ 
+
+
+```{r}
+Year_raw <- gather(Industrial_dataset2, "Country", "Value", 2:85)
+
+Year_raw
+
+ 
+```
+
+ 
+
+
+```{r}
+Year_Data <- (na.omit(Year_raw))
+head(Year_Data)
+```
+ 
+
+
+
+ 
+
+
+```{r}
+select_country <- select(Industrial_dataset_Year,year,United.States)
+
+select_country
+
+```
+
+
+```{r}
+Labor_Force_data3 <- read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/Labor%20Force%20Statistics%20from%20the%20Current%20Population%20Survey.csv")
+
+Labor_Force_data3
+```
+```{r}
+head(Unemployment_dataset1,10)
+```
+
+```{r}
+tail(Unemployment_dataset1,21)
+```
+
+```{r}
+population_servey <- pivot_longer(Labor_Force_data3,2:13,names_to = "Month",values_to = "population_servey_rate")
+
+population_servey
+
+```
+
+```{r}
+population_servey %>% rename_all(tolower) %>% 
+  select(year, month, population_servey_rate) %>%
+  mutate(year = tolower(year), month=tolower(month))
+```
+
+
+```{r}
+subset_month<- subset(population_servey,Month=="Jan")
+subset_month
+```
+```{r}
+select_year<-select(population_servey,Year,population_servey_rate)
+select_year
+```
+
+
+```{r}
+bind_rows(Unemployment_dataset1,population_servey,Labor_Force_data3)
+```
+```{r}
+nrow(Unemployment_dataset1) == nrow(Industrial_dataset2)
+```
+
+
+```{r}
+bind_cols(Unemployment_dataset1,Industrial_dataset2)
+
+```
+
+
+```{r}
+Unemployment_dataset1 %>% 
+  cross_join(Industrial_dataset2)%>%
+  group_by(Year)
+```
+ 
+
+ 
+

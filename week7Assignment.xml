@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Md Asaduzzaman</Author>
+  <LastAuthor>Md Asaduzzaman</LastAuthor>
+  <Created>2024-10-22T00:31:58Z</Created>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>5244</WindowHeight>
+  <WindowWidth>17088</WindowWidth>
+  <WindowTopX>32767</WindowTopX>
+  <WindowTopY>32767</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Aptos Narrow" x:Family="Swiss" ss:Size="11"
+    ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="week7Assignment">
+  <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="21" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="50.4" ss:DefaultRowHeight="14.4">
+   <Row>
+    <Cell><Data ss:Type="String"> Category</Data></Cell>
+    <Cell><Data ss:Type="String">Item Name</Data></Cell>
+    <Cell><Data ss:Type="String">Item ID</Data></Cell>
+    <Cell><Data ss:Type="String">Brand</Data></Cell>
+    <Cell><Data ss:Type="String">Price</Data></Cell>
+    <Cell><Data ss:Type="String"> Variation ID</Data></Cell>
+    <Cell><Data ss:Type="String"> Color</Data></Cell>
+    <Cell><Data ss:Type="String"> Variation Details</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Electronics</Data></Cell>
+    <Cell><Data ss:Type="String"> Smartphone</Data></Cell>
+    <Cell><Data ss:Type="Number">101</Data></Cell>
+    <Cell><Data ss:Type="String"> TechBrand</Data></Cell>
+    <Cell><Data ss:Type="Number">699.99</Data></Cell>
+    <Cell><Data ss:Type="String"> 101-A</Data></Cell>
+    <Cell><Data ss:Type="String"> Color: Black</Data></Cell>
+    <Cell><Data ss:Type="String">  Storage: 64GB</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Electronics</Data></Cell>
+    <Cell><Data ss:Type="String">Smartphone</Data></Cell>
+    <Cell><Data ss:Type="Number">101</Data></Cell>
+    <Cell><Data ss:Type="String">TechBrand</Data></Cell>
+    <Cell><Data ss:Type="Number">699.99</Data></Cell>
+    <Cell><Data ss:Type="String">101-B</Data></Cell>
+    <Cell><Data ss:Type="String">Color: White</Data></Cell>
+    <Cell><Data ss:Type="String"> Storage: 128GB</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Electronics</Data></Cell>
+    <Cell><Data ss:Type="String">Laptop</Data></Cell>
+    <Cell><Data ss:Type="Number">102</Data></Cell>
+    <Cell><Data ss:Type="String">CompuBrand</Data></Cell>
+    <Cell><Data ss:Type="Number">1099.99</Data></Cell>
+    <Cell><Data ss:Type="String">102-A</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Silver</Data></Cell>
+    <Cell><Data ss:Type="String"> Storage: 256GB</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Electronics</Data></Cell>
+    <Cell><Data ss:Type="String">Laptop</Data></Cell>
+    <Cell><Data ss:Type="Number">102</Data></Cell>
+    <Cell><Data ss:Type="String">CompuBrand</Data></Cell>
+    <Cell><Data ss:Type="Number">1099.99</Data></Cell>
+    <Cell><Data ss:Type="String">102-B</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Space Gray</Data></Cell>
+    <Cell><Data ss:Type="String"> Storage: 512GB</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Home Appliances</Data></Cell>
+    <Cell><Data ss:Type="String">Refrigerator</Data></Cell>
+    <Cell><Data ss:Type="Number">201</Data></Cell>
+    <Cell><Data ss:Type="String">HomeCool</Data></Cell>
+    <Cell><Data ss:Type="Number">899.99</Data></Cell>
+    <Cell><Data ss:Type="String">201-A</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Stainless Steel</Data></Cell>
+    <Cell><Data ss:Type="String"> Capacity: 20 cu ft</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Home Appliances</Data></Cell>
+    <Cell><Data ss:Type="String">Refrigerator</Data></Cell>
+    <Cell><Data ss:Type="Number">201</Data></Cell>
+    <Cell><Data ss:Type="String">HomeCool</Data></Cell>
+    <Cell><Data ss:Type="Number">899.99</Data></Cell>
+    <Cell><Data ss:Type="String">201-B</Data></Cell>
+    <Cell><Data ss:Type="String">Color: White</Data></Cell>
+    <Cell><Data ss:Type="String"> Capacity: 18 cu ft</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Home Appliances</Data></Cell>
+    <Cell><Data ss:Type="String">Washing Machine</Data></Cell>
+    <Cell><Data ss:Type="Number">202</Data></Cell>
+    <Cell><Data ss:Type="String">CleanTech</Data></Cell>
+    <Cell><Data ss:Type="Number">499.99</Data></Cell>
+    <Cell><Data ss:Type="String">202-A</Data></Cell>
+    <Cell><Data ss:Type="String">Type: Front Load</Data></Cell>
+    <Cell><Data ss:Type="String"> Capacity: 4.5 cu ft</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Home Appliances</Data></Cell>
+    <Cell><Data ss:Type="String">Washing Machine</Data></Cell>
+    <Cell><Data ss:Type="Number">202</Data></Cell>
+    <Cell><Data ss:Type="String">CleanTech</Data></Cell>
+    <Cell><Data ss:Type="Number">499.99</Data></Cell>
+    <Cell><Data ss:Type="String">202-B</Data></Cell>
+    <Cell><Data ss:Type="String">Type: Top Load</Data></Cell>
+    <Cell><Data ss:Type="String"> Capacity: 5.0 cu ft</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Clothing</Data></Cell>
+    <Cell><Data ss:Type="String">T-Shirt</Data></Cell>
+    <Cell><Data ss:Type="Number">301</Data></Cell>
+    <Cell><Data ss:Type="String">FashionCo</Data></Cell>
+    <Cell><Data ss:Type="Number">19.989999999999998</Data></Cell>
+    <Cell><Data ss:Type="String">301-A</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Blue</Data></Cell>
+    <Cell><Data ss:Type="String"> Size: S</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Clothing</Data></Cell>
+    <Cell><Data ss:Type="String">T-Shirt</Data></Cell>
+    <Cell><Data ss:Type="Number">301</Data></Cell>
+    <Cell><Data ss:Type="String">FashionCo</Data></Cell>
+    <Cell><Data ss:Type="Number">19.989999999999998</Data></Cell>
+    <Cell><Data ss:Type="String">301-B</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Red</Data></Cell>
+    <Cell><Data ss:Type="String"> Size: M</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Clothing</Data></Cell>
+    <Cell><Data ss:Type="String">T-Shirt</Data></Cell>
+    <Cell><Data ss:Type="Number">301</Data></Cell>
+    <Cell><Data ss:Type="String">FashionCo</Data></Cell>
+    <Cell><Data ss:Type="Number">19.989999999999998</Data></Cell>
+    <Cell><Data ss:Type="String">301-C</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Green</Data></Cell>
+    <Cell><Data ss:Type="String"> Size: L</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Clothing</Data></Cell>
+    <Cell><Data ss:Type="String">Jeans</Data></Cell>
+    <Cell><Data ss:Type="Number">302</Data></Cell>
+    <Cell><Data ss:Type="String">DenimWorks</Data></Cell>
+    <Cell><Data ss:Type="Number">49.99</Data></Cell>
+    <Cell><Data ss:Type="String">302-A</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Dark Blue</Data></Cell>
+    <Cell><Data ss:Type="String"> Size: 32</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Clothing</Data></Cell>
+    <Cell><Data ss:Type="String">Jeans</Data></Cell>
+    <Cell><Data ss:Type="Number">302</Data></Cell>
+    <Cell><Data ss:Type="String">DenimWorks</Data></Cell>
+    <Cell><Data ss:Type="Number">49.99</Data></Cell>
+    <Cell><Data ss:Type="String">302-B</Data></Cell>
+    <Cell><Data ss:Type="String">Color: Light Blue</Data></Cell>
+    <Cell><Data ss:Type="String"> Size: 34</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Books</Data></Cell>
+    <Cell><Data ss:Type="String">Fiction Novel</Data></Cell>
+    <Cell><Data ss:Type="Number">401</Data></Cell>
+    <Cell><Data ss:Type="String">-</Data></Cell>
+    <Cell><Data ss:Type="Number">14.99</Data></Cell>
+    <Cell><Data ss:Type="String">401-A</Data></Cell>
+    <Cell><Data ss:Type="String">Format: Hardcover</Data></Cell>
+    <Cell><Data ss:Type="String"> Language: English</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Books</Data></Cell>
+    <Cell><Data ss:Type="String">Fiction Novel</Data></Cell>
+    <Cell><Data ss:Type="Number">401</Data></Cell>
+    <Cell><Data ss:Type="String">-</Data></Cell>
+    <Cell><Data ss:Type="Number">14.99</Data></Cell>
+    <Cell><Data ss:Type="String">401-B</Data></Cell>
+    <Cell><Data ss:Type="String">Format: Paperback</Data></Cell>
+    <Cell><Data ss:Type="String"> Language: Spanish</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Books</Data></Cell>
+    <Cell><Data ss:Type="String">Non-Fiction Guide</Data></Cell>
+    <Cell><Data ss:Type="Number">402</Data></Cell>
+    <Cell><Data ss:Type="String">-</Data></Cell>
+    <Cell><Data ss:Type="Number">24.99</Data></Cell>
+    <Cell><Data ss:Type="String">402-A</Data></Cell>
+    <Cell><Data ss:Type="String">Format: eBook</Data></Cell>
+    <Cell><Data ss:Type="String"> Language: English</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Books</Data></Cell>
+    <Cell><Data ss:Type="String">Non-Fiction Guide</Data></Cell>
+    <Cell><Data ss:Type="Number">402</Data></Cell>
+    <Cell><Data ss:Type="String">-</Data></Cell>
+    <Cell><Data ss:Type="Number">24.99</Data></Cell>
+    <Cell><Data ss:Type="String">402-B</Data></Cell>
+    <Cell><Data ss:Type="String">Format: Paperback</Data></Cell>
+    <Cell><Data ss:Type="String"> Language: French</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Sports Equipment</Data></Cell>
+    <Cell><Data ss:Type="String">Basketball</Data></Cell>
+    <Cell><Data ss:Type="Number">501</Data></Cell>
+    <Cell><Data ss:Type="String">SportsGear</Data></Cell>
+    <Cell><Data ss:Type="Number">29.99</Data></Cell>
+    <Cell><Data ss:Type="String">501-A</Data></Cell>
+    <Cell><Data ss:Type="String">Size: Size 7</Data></Cell>
+    <Cell><Data ss:Type="String"> Color: Orange</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Sports Equipment</Data></Cell>
+    <Cell><Data ss:Type="String">Tennis Racket</Data></Cell>
+    <Cell><Data ss:Type="Number">502</Data></Cell>
+    <Cell><Data ss:Type="String">RacketPro</Data></Cell>
+    <Cell><Data ss:Type="Number">89.99</Data></Cell>
+    <Cell><Data ss:Type="String">502-A</Data></Cell>
+    <Cell><Data ss:Type="String">Material: Graphite</Data></Cell>
+    <Cell><Data ss:Type="String"> Color: Black</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String"> Sports Equipment</Data></Cell>
+    <Cell><Data ss:Type="String">Tennis Racket</Data></Cell>
+    <Cell><Data ss:Type="Number">502</Data></Cell>
+    <Cell><Data ss:Type="String">RacketPro</Data></Cell>
+    <Cell><Data ss:Type="Number">89.99</Data></Cell>
+    <Cell><Data ss:Type="String">502-B</Data></Cell>
+    <Cell><Data ss:Type="String">Material: Aluminum</Data></Cell>
+    <Cell><Data ss:Type="String"> Color: Silver</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

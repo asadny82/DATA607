@@ -1,4 +1,4 @@
-{"CUNYMart":[
+{"CUNYMart" :[
     {
         "Category": " Electronics",
         "Item Name": " Smartphone",
@@ -199,4 +199,5 @@
         " Color": "Material: Aluminum",
         " Variation Details": "Silver"
     }
-]}
+    ]
+}

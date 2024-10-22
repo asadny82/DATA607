@@ -26,7 +26,7 @@
         "Brand": "CompuBrand",
         "Price": "1099.99",
         " Variation ID": "102-A",
-        " Color": "Color: Silver",
+        " Color": "Silver",
         " Variation Details": " Storage: 256GB"
     },
     {
@@ -176,8 +176,8 @@
         "Brand": "SportsGear",
         "Price": "29.99",
         " Variation ID": "501-A",
-        " Color": "Size: Size 7",
-        " Variation Details": "Orange"
+        " Color": "Orange",
+        " Variation Details": "Size: Size 7"
     },
     {
         "Category": " Sports Equipment",
@@ -186,8 +186,8 @@
         "Brand": "RacketPro",
         "Price": "89.99",
         " Variation ID": "502-A",
-        " Color": "Material: Graphite",
-        " Variation Details": "Black"
+        " Color": "Black",
+        " Variation Details": "Material: Graphite"
     },
     {
         "Category": " Sports Equipment",
@@ -196,8 +196,8 @@
         "Brand": "RacketPro",
         "Price": "89.99",
         " Variation ID": "502-B",
-        " Color": "Material: Aluminum",
-        " Variation Details": "Silver"
+        " Color": "Silver ",
+        " Variation Details": "Material: Aluminum"
     }
     ]
 

@@ -6,7 +6,7 @@
         "Brand": " TechBrand",
         "Price": "699.99",
         " Variation ID": " 101-A",
-        " Color": " Color: Black",
+        " Color": "Black",
         " Variation Details": "  Storage: 64GB"
     },
     {
@@ -16,7 +16,7 @@
         "Brand": "TechBrand",
         "Price": "699.99",
         " Variation ID": "101-B",
-        " Color": "Color: White",
+        " Color": "White",
         " Variation Details": " Storage: 128GB"
     },
     {
@@ -36,7 +36,7 @@
         "Brand": "CompuBrand",
         "Price": "1099.99",
         " Variation ID": "102-B",
-        " Color": "Color: Space Gray",
+        " Color": "Space Gray",
         " Variation Details": " Storage: 512GB"
     },
     {
@@ -46,7 +46,7 @@
         "Brand": "HomeCool",
         "Price": "899.99",
         " Variation ID": "201-A",
-        " Color": "Color: Stainless Steel",
+        " Color": "Stainless Steel",
         " Variation Details": " Capacity: 20 cu ft"
     },
     {
@@ -56,7 +56,7 @@
         "Brand": "HomeCool",
         "Price": "899.99",
         " Variation ID": "201-B",
-        " Color": "Color: White",
+        " Color": "White",
         " Variation Details": " Capacity: 18 cu ft"
     },
     {
@@ -66,7 +66,7 @@
         "Brand": "CleanTech",
         "Price": "499.99",
         " Variation ID": "202-A",
-        " Color": "Type: Front Load",
+        " Color": "Front Load",
         " Variation Details": " Capacity: 4.5 cu ft"
     },
     {
@@ -76,7 +76,7 @@
         "Brand": "CleanTech",
         "Price": "499.99",
         " Variation ID": "202-B",
-        " Color": "Type: Top Load",
+        " Color": "Top Load",
         " Variation Details": " Capacity: 5.0 cu ft"
     },
     {
@@ -86,7 +86,7 @@
         "Brand": "FashionCo",
         "Price": "19.99",
         " Variation ID": "301-A",
-        " Color": "Color: Blue",
+        " Color": "Blue",
         " Variation Details": " Size: S"
     },
     {
@@ -96,7 +96,7 @@
         "Brand": "FashionCo",
         "Price": "19.99",
         " Variation ID": "301-B",
-        " Color": "Color: Red",
+        " Color": "Red",
         " Variation Details": " Size: M"
     },
     {
@@ -106,7 +106,7 @@
         "Brand": "FashionCo",
         "Price": "19.99",
         " Variation ID": "301-C",
-        " Color": "Color: Green",
+        " Color": "Green",
         " Variation Details": " Size: L"
     },
     {
@@ -116,7 +116,7 @@
         "Brand": "DenimWorks",
         "Price": "49.99",
         " Variation ID": "302-A",
-        " Color": "Color: Dark Blue",
+        " Color": "Dark Blue",
         " Variation Details": " Size: 32"
     },
     {
@@ -126,7 +126,7 @@
         "Brand": "DenimWorks",
         "Price": "49.99",
         " Variation ID": "302-B",
-        " Color": "Color: Light Blue",
+        " Color": "Light Blue",
         " Variation Details": " Size: 34"
     },
     {
@@ -136,7 +136,7 @@
         "Brand": "-",
         "Price": "14.99",
         " Variation ID": "401-A",
-        " Color": "Format: Hardcover",
+        " Color": "Hardcover",
         " Variation Details": " Language: English"
     },
     {
@@ -146,7 +146,7 @@
         "Brand": "-",
         "Price": "14.99",
         " Variation ID": "401-B",
-        " Color": "Format: Paperback",
+        " Color": "Paperback",
         " Variation Details": " Language: Spanish"
     },
     {
@@ -156,7 +156,7 @@
         "Brand": "-",
         "Price": "24.99",
         " Variation ID": "402-A",
-        " Color": "Format: eBook",
+        " Color": "eBook",
         " Variation Details": " Language: English"
     },
     {
@@ -166,7 +166,7 @@
         "Brand": "-",
         "Price": "24.99",
         " Variation ID": "402-B",
-        " Color": "Format: Paperback",
+        " Color": "Paperback",
         " Variation Details": " Language: French"
     },
     {
@@ -177,7 +177,7 @@
         "Price": "29.99",
         " Variation ID": "501-A",
         " Color": "Size: Size 7",
-        " Variation Details": " Color: Orange"
+        " Variation Details": "Orange"
     },
     {
         "Category": " Sports Equipment",
@@ -187,7 +187,7 @@
         "Price": "89.99",
         " Variation ID": "502-A",
         " Color": "Material: Graphite",
-        " Variation Details": " Color: Black"
+        " Variation Details": "Black"
     },
     {
         "Category": " Sports Equipment",
@@ -197,6 +197,6 @@
         "Price": "89.99",
         " Variation ID": "502-B",
         " Color": "Material: Aluminum",
-        " Variation Details": " Color: Silver"
+        " Variation Details": "Silver"
     }
 ]

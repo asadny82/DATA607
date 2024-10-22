@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+ <CUNYMart>
+		<Category id ="1">
+			<Category> Electronics</Category>
+			<ItemName> Smartphone</ItemName>
+			<ItemID>101</ItemID>
+			<Brand> TechBrand</Brand>
+			<Price>699.99</Price>
+			<VariationID> 101-A</VariationID>
+			<Color>  Black</Color>
+			<VariationDetails>  Storage: 64GB</VariationDetails>
+		</Category >
+		<Category id ="2">
+			<Category> Electronics</Category>
+			<ItemName>Smartphone</ItemName>
+			<ItemID>101</ItemID>
+			<Brand>TechBrand</Brand>
+			<Price>699.99</Price>
+			<VariationID>101-B</VariationID>
+			<Color> White</Color>
+			<VariationDetails> Storage: 128GB</VariationDetails>
+		</Category >
+		<Category id ="3">
+			<Category> Electronics</Category>
+			<ItemName>Laptop</ItemName>
+			<ItemID>102</ItemID>
+			<Brand>CompuBrand</Brand>
+			<Price>1099.99</Price>
+			<VariationID>102-A</VariationID>
+			<Color>Silver</Color>
+			<VariationDetails> Storage: 256GB</VariationDetails>
+		</Category>
+		<Category id ="4">
+			<Category> Electronics</Category>
+			<ItemName>Laptop</ItemName>
+			<ItemID>102</ItemID>
+			<Brand>CompuBrand</Brand>
+			<Price>1099.99</Price>
+			<VariationID>102-B</VariationID>
+			<Color>Space Gray</Color>
+			<VariationDetails> Storage: 512GB</VariationDetails>
+		</Category>
+		<Category id ="5">
+			<Category> Home Appliances</Category>
+			<ItemName>Refrigerator</ItemName>
+			<ItemID>201</ItemID>
+			<Brand>HomeCool</Brand>
+			<Price>899.99</Price>
+			<VariationID>201-A</VariationID>
+			<Color>Stainless Steel</Color>
+			<VariationDetails> Capacity: 20 cu ft</VariationDetails>
+		</Category>
+		 
+	</CUNYMart>
+ 

@@ -45,6 +45,12 @@ mysqldbTBConn = dbConnect(RMySQL::MySQL(),
 dbListTables(mysqldbTBConn)
 
 ```
+CREATE TABLE `project3`.`experience` (
+  `experience_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `data_science_experience` BIT NULL,
+  `sofware_engineering_experience` BIT NULL,
+  PRIMARY KEY (`experience_id`));
 
 
 

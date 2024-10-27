@@ -1,0 +1,853 @@
+---
+title: "week7Assignment"
+author: "Md Asaduzzaman"
+date: "2024-10-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+ **
+ Data 607 
+Assignment: working with JSON, HTML, XML, and Parquet in R 
+You have received the following data from CUNYMart, located at 123 Example Street, 
+Anytown, USA.
+ Category,Item Name,Item ID,Brand,Price,Variation ID,Variation Details
+ Electronics,Smartphone,101,TechBrand,699.99,101-A,Color: Black, Storage: 64GB
+ Electronics,Smartphone,101,TechBrand,699.99,101-B,Color: White, Storage: 128GB
+ Electronics,Laptop,102,CompuBrand,1099.99,102-A,Color: Silver, Storage: 256GB
+ Electronics,Laptop,102,CompuBrand,1099.99,102-B,Color: Space Gray, Storage: 512GB
+ 
+ Home Appliances,Refrigerator,201,HomeCool,899.99,201-A,Color: Stainless Steel, Capacity: 
+20 cu ft
+ Home Appliances,Refrigerator,201,HomeCool,899.99,201-B,Color: White, Capacity: 18 cu ft
+ Home Appliances,Washing Machine,202,CleanTech,499.99,202-A,Type: Front Load, Capacity: 
+4.5 cu ft
+ Home Appliances,Washing Machine,202,CleanTech,499.99,202-B,Type: Top Load, Capacity: 
+5.0 cu ft
+
+ Clothing,T-Shirt,301,FashionCo,19.99,301-A,Color: Blue, Size: S
+ Clothing,T-Shirt,301,FashionCo,19.99,301-B,Color: Red, Size: M
+ Clothing,T-Shirt,301,FashionCo,19.99,301-C,Color: Green, Size: L
+ Clothing,Jeans,302,DenimWorks,49.99,302-A,Color: Dark Blue, Size: 32
+ Clothing,Jeans,302,DenimWorks,49.99,302-B,Color: Light Blue, Size: 34
+ Books,Fiction Novel,401,-,14.99,401-A,Format: Hardcover, Language: English
+ Books,Fiction Novel,401,-,14.99,401-B,Format: Paperback, Language: Spanish
+ Books,Non-Fiction Guide,402,-,24.99,402-A,Format: eBook, Language: English
+ Books,Non-Fiction Guide,402,-,24.99,402-B,Format: Paperback, Language: French
+ Sports Equipment,Basketball,501,SportsGear,29.99,501-A,Size: Size 7, Color: Orange
+ Sports Equipment,Tennis Racket,502,RacketPro,89.99,502-A,Material: Graphite, Color: Black
+ Sports Equipment,Tennis Racket,502,RacketPro,89.99,502-B,Material: Aluminum, Color: Silver
+ 
+ This data will be used for inventory analysis at the retailer. You are required to prepare the data 
+for analysis by formatting it in JSON, HTML, XML, and Parquet. Additionally, provide the pros 
+and cons of each format.
+ Your must include R code for generating and importing the data into R.
+ **
+ 
+```{r}
+library(tidyverse)
+library(XML)
+library(rvest)
+library(RCurl)
+library(jsonlite)
+library(httr)
+library(XML)
+library(plyr)
+library(dplyr)
+library(xml2)
+library(tidyverse)
+
+```
+
+ #Create a html:
+
+ <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Category</th>
+      <th>Item Name</th>
+      <th>Item ID</th>
+      <th>Brand</th>
+      <th>Price</th>
+      <th>Variation ID</th>
+      <th>Color</th>
+      <th>Variation Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Electronics</td>
+      <td>Smartphone</td>
+      <td>101</td>
+      <td>TechBrand</td>
+      <td>699.99</td>
+      <td>101-A</td>
+      <td>Color: Black</td>
+      <td>Storage: 64GB</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Electronics</td>
+      <td>Smartphone</td>
+      <td>101</td>
+      <td>TechBrand</td>
+      <td>699.99</td>
+      <td>101-B</td>
+      <td>Color: White</td>
+      <td>Storage: 128GB</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Electronics</td>
+      <td>Laptop</td>
+      <td>102</td>
+      <td>CompuBrand</td>
+      <td>1099.99</td>
+      <td>102-A</td>
+      <td>Color: Silver</td>
+      <td>Storage: 256GB</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Electronics</td>
+      <td>Laptop</td>
+      <td>102</td>
+      <td>CompuBrand</td>
+      <td>1099.99</td>
+      <td>102-B</td>
+      <td>Color: Space Gray</td>
+      <td>Storage: 512GB</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Home Appliances</td>
+      <td>Refrigerator</td>
+      <td>201</td>
+      <td>HomeCool</td>
+      <td>899.99</td>
+      <td>201-A</td>
+      <td>Color: Stainless Steel</td>
+      <td>Capacity: 20 cu ft</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Home Appliances</td>
+      <td>Refrigerator</td>
+      <td>201</td>
+      <td>HomeCool</td>
+      <td>899.99</td>
+      <td>201-B</td>
+      <td>Color: White</td>
+      <td>Capacity: 18 cu ft</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Home Appliances</td>
+      <td>Washing Machine</td>
+      <td>202</td>
+      <td>CleanTech</td>
+      <td>499.99</td>
+      <td>202-A</td>
+      <td>Type: Front Load</td>
+      <td>Capacity: 4.5 cu ft</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Home Appliances</td>
+      <td>Washing Machine</td>
+      <td>202</td>
+      <td>CleanTech</td>
+      <td>499.99</td>
+      <td>202-B</td>
+      <td>Type: Top Load</td>
+      <td>Capacity: 5.0 cu ft</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Clothing</td>
+      <td>T-Shirt</td>
+      <td>301</td>
+      <td>FashionCo</td>
+      <td>19.99</td>
+      <td>301-A</td>
+      <td>Color: Blue</td>
+      <td>Size: S</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Clothing</td>
+      <td>T-Shirt</td>
+      <td>301</td>
+      <td>FashionCo</td>
+      <td>19.99</td>
+      <td>301-B</td>
+      <td>Color: Red</td>
+      <td>Size: M</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Clothing</td>
+      <td>T-Shirt</td>
+      <td>301</td>
+      <td>FashionCo</td>
+      <td>19.99</td>
+      <td>301-C</td>
+      <td>Color: Green</td>
+      <td>Size: L</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Clothing</td>
+      <td>Jeans</td>
+      <td>302</td>
+      <td>DenimWorks</td>
+      <td>49.99</td>
+      <td>302-A</td>
+      <td>Color: Dark Blue</td>
+      <td>Size: 32</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Clothing</td>
+      <td>Jeans</td>
+      <td>302</td>
+      <td>DenimWorks</td>
+      <td>49.99</td>
+      <td>302-B</td>
+      <td>Color: Light Blue</td>
+      <td>Size: 34</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Books</td>
+      <td>Fiction Novel</td>
+      <td>401</td>
+      <td>-</td>
+      <td>14.99</td>
+      <td>401-A</td>
+      <td>Format: Hardcover</td>
+      <td>Language: English</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Books</td>
+      <td>Fiction Novel</td>
+      <td>401</td>
+      <td>-</td>
+      <td>14.99</td>
+      <td>401-B</td>
+      <td>Format: Paperback</td>
+      <td>Language: Spanish</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Books</td>
+      <td>Non-Fiction Guide</td>
+      <td>402</td>
+      <td>-</td>
+      <td>24.99</td>
+      <td>402-A</td>
+      <td>Format: eBook</td>
+      <td>Language: English</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Books</td>
+      <td>Non-Fiction Guide</td>
+      <td>402</td>
+      <td>-</td>
+      <td>24.99</td>
+      <td>402-B</td>
+      <td>Format: Paperback</td>
+      <td>Language: French</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Sports Equipment</td>
+      <td>Basketball</td>
+      <td>501</td>
+      <td>SportsGear</td>
+      <td>29.99</td>
+      <td>501-A</td>
+      <td>Size: Size 7</td>
+      <td>Color: Orange</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Sports Equipment</td>
+      <td>Tennis Racket</td>
+      <td>502</td>
+      <td>RacketPro</td>
+      <td>89.99</td>
+      <td>502-A</td>
+      <td>Material: Graphite</td>
+      <td>Color: Black</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Sports Equipment</td>
+      <td>Tennis Racket</td>
+      <td>502</td>
+      <td>RacketPro</td>
+      <td>89.99</td>
+      <td>502-B</td>
+      <td>Material: Aluminum</td>
+      <td>Color: Silver</td>
+    </tr>
+  </tbody>
+</table>
+ 
+```{r}
+ 
+
+url <- getURL('https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/week7Assignment.html')
+data_HTML <- url %>%
+  read_html(encoding = 'UTF-8') %>%
+  html_table(header = NA, trim = TRUE) %>%
+  .[[1]]
+
+data_HTML
+```
+```{r}
+names(data_HTML)[1] <- 'x'
+  names(data_HTML)[2] <- 'catagory'
+names(data_HTML)[3] <-'itemName'
+names(data_HTML)[4] <- 'itemID'
+ names(data_HTML)[5] <- 'brand'
+ names(data_HTML)[6] <- 'price'
+ names(data_HTML)[7] <- 'variationID'
+ names(data_HTML)[8] <- 'color'
+  names(data_HTML)[9] <- 'variationDetails'
+data_HTML
+```
+ 
+```{r}
+data_HTML <- na.omit(data_HTML) %>%  
+mutate(color = na_if(color,'')) %>%
+fill(color, .direction = 'down') %>%
+mutate(variationDetails = str_replace(variationDetails, 'Size: S','Storage: 64GB'),
+variationDetails = str_replace(variationDetails, 'Size: M','Storage: 64GB')) %>%
+  
+group_by(itemName) 
+data
+```
+ 
+ 
+ 
+ 
+
+Json:
+[
+    {
+        "Category": " Electronics",
+        "Item Name": " Smartphone",
+        "Item ID": "101",
+        "Brand": " TechBrand",
+        "Price": "699.99",
+        " Variation ID": " 101-A",
+        " Color": " Color: Black",
+        " Variation Details": "  Storage: 64GB"
+    },
+    {
+        "Category": " Electronics",
+        "Item Name": "Smartphone",
+        "Item ID": "101",
+        "Brand": "TechBrand",
+        "Price": "699.99",
+        " Variation ID": "101-B",
+        " Color": "Color: White",
+        " Variation Details": " Storage: 128GB"
+    },
+    {
+        "Category": " Electronics",
+        "Item Name": "Laptop",
+        "Item ID": "102",
+        "Brand": "CompuBrand",
+        "Price": "1099.99",
+        " Variation ID": "102-A",
+        " Color": "Color: Silver",
+        " Variation Details": " Storage: 256GB"
+    },
+    {
+        "Category": " Electronics",
+        "Item Name": "Laptop",
+        "Item ID": "102",
+        "Brand": "CompuBrand",
+        "Price": "1099.99",
+        " Variation ID": "102-B",
+        " Color": "Color: Space Gray",
+        " Variation Details": " Storage: 512GB"
+    },
+    {
+        "Category": " Home Appliances",
+        "Item Name": "Refrigerator",
+        "Item ID": "201",
+        "Brand": "HomeCool",
+        "Price": "899.99",
+        " Variation ID": "201-A",
+        " Color": "Color: Stainless Steel",
+        " Variation Details": " Capacity: 20 cu ft"
+    },
+    {
+        "Category": " Home Appliances",
+        "Item Name": "Refrigerator",
+        "Item ID": "201",
+        "Brand": "HomeCool",
+        "Price": "899.99",
+        " Variation ID": "201-B",
+        " Color": "Color: White",
+        " Variation Details": " Capacity: 18 cu ft"
+    },
+    {
+        "Category": " Home Appliances",
+        "Item Name": "Washing Machine",
+        "Item ID": "202",
+        "Brand": "CleanTech",
+        "Price": "499.99",
+        " Variation ID": "202-A",
+        " Color": "Type: Front Load",
+        " Variation Details": " Capacity: 4.5 cu ft"
+    },
+    {
+        "Category": " Home Appliances",
+        "Item Name": "Washing Machine",
+        "Item ID": "202",
+        "Brand": "CleanTech",
+        "Price": "499.99",
+        " Variation ID": "202-B",
+        " Color": "Type: Top Load",
+        " Variation Details": " Capacity: 5.0 cu ft"
+    },
+    {
+        "Category": " Clothing",
+        "Item Name": "T-Shirt",
+        "Item ID": "301",
+        "Brand": "FashionCo",
+        "Price": "19.99",
+        " Variation ID": "301-A",
+        " Color": "Color: Blue",
+        " Variation Details": " Size: S"
+    },
+    {
+        "Category": " Clothing",
+        "Item Name": "T-Shirt",
+        "Item ID": "301",
+        "Brand": "FashionCo",
+        "Price": "19.99",
+        " Variation ID": "301-B",
+        " Color": "Color: Red",
+        " Variation Details": " Size: M"
+    },
+    {
+        "Category": " Clothing",
+        "Item Name": "T-Shirt",
+        "Item ID": "301",
+        "Brand": "FashionCo",
+        "Price": "19.99",
+        " Variation ID": "301-C",
+        " Color": "Color: Green",
+        " Variation Details": " Size: L"
+    },
+    {
+        "Category": " Clothing",
+        "Item Name": "Jeans",
+        "Item ID": "302",
+        "Brand": "DenimWorks",
+        "Price": "49.99",
+        " Variation ID": "302-A",
+        " Color": "Color: Dark Blue",
+        " Variation Details": " Size: 32"
+    },
+    {
+        "Category": " Clothing",
+        "Item Name": "Jeans",
+        "Item ID": "302",
+        "Brand": "DenimWorks",
+        "Price": "49.99",
+        " Variation ID": "302-B",
+        " Color": "Color: Light Blue",
+        " Variation Details": " Size: 34"
+    },
+    {
+        "Category": " Books",
+        "Item Name": "Fiction Novel",
+        "Item ID": "401",
+        "Brand": "-",
+        "Price": "14.99",
+        " Variation ID": "401-A",
+        " Color": "Format: Hardcover",
+        " Variation Details": " Language: English"
+    },
+    {
+        "Category": " Books",
+        "Item Name": "Fiction Novel",
+        "Item ID": "401",
+        "Brand": "-",
+        "Price": "14.99",
+        " Variation ID": "401-B",
+        " Color": "Format: Paperback",
+        " Variation Details": " Language: Spanish"
+    },
+    {
+        "Category": " Books",
+        "Item Name": "Non-Fiction Guide",
+        "Item ID": "402",
+        "Brand": "-",
+        "Price": "24.99",
+        " Variation ID": "402-A",
+        " Color": "Format: eBook",
+        " Variation Details": " Language: English"
+    },
+    {
+        "Category": " Books",
+        "Item Name": "Non-Fiction Guide",
+        "Item ID": "402",
+        "Brand": "-",
+        "Price": "24.99",
+        " Variation ID": "402-B",
+        " Color": "Format: Paperback",
+        " Variation Details": " Language: French"
+    },
+    {
+        "Category": " Sports Equipment",
+        "Item Name": "Basketball",
+        "Item ID": "501",
+        "Brand": "SportsGear",
+        "Price": "29.99",
+        " Variation ID": "501-A",
+        " Color": "Size: Size 7",
+        " Variation Details": " Color: Orange"
+    },
+    {
+        "Category": " Sports Equipment",
+        "Item Name": "Tennis Racket",
+        "Item ID": "502",
+        "Brand": "RacketPro",
+        "Price": "89.99",
+        " Variation ID": "502-A",
+        " Color": "Material: Graphite",
+        " Variation Details": " Color: Black"
+    },
+    {
+        "Category": " Sports Equipment",
+        "Item Name": "Tennis Racket",
+        "Item ID": "502",
+        "Brand": "RacketPro",
+        "Price": "89.99",
+        " Variation ID": "502-B",
+        " Color": "Material: Aluminum",
+        " Variation Details": " Color: Silver"
+    }
+]
+
+
+
+```{r}
+dataJson <- read_json("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/week7Assignment.json")
+ 
+dataJson
+```
+```{r}
+json_dirty <- sapply(dataJson, `[`)
+knitr::kable(json_dirty)
+```
+
+
+```{r}
+url <- getURL("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/week7Assignment.json")
+dataJson <- url %>%
+fromJSON() %>%
+as.data.frame()  
+dataJson
+```
+
+
+```{r}
+str(dataJson)
+```
+ 
+
+
+ 
+
+
+XML: 
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+ <CUNYMart>
+		<Category id ="1">
+			<Category> Electronics</Category>
+			<ItemName> Smartphone</ItemName>
+			<ItemID>101</ItemID>
+			<Brand> TechBrand</Brand>
+			<Price>699.99</Price>
+			<VariationID> 101-A</VariationID>
+			<Color>  Black</Color>
+			<VariationDetails>  Storage: 64GB</VariationDetails>
+		</Category >
+		<Category id ="2">
+			<Category> Electronics</Category>
+			<ItemName>Smartphone</ItemName>
+			<ItemID>101</ItemID>
+			<Brand>TechBrand</Brand>
+			<Price>699.99</Price>
+			<VariationID>101-B</VariationID>
+			<Color> White</Color>
+			<VariationDetails> Storage: 128GB</VariationDetails>
+		</Category >
+		<Category id ="3">
+			<Category> Electronics</Category>
+			<ItemName>Laptop</ItemName>
+			<ItemID>102</ItemID>
+			<Brand>CompuBrand</Brand>
+			<Price>1099.99</Price>
+			<VariationID>102-A</VariationID>
+			<Color>Silver</Color>
+			<VariationDetails> Storage: 256GB</VariationDetails>
+		</Category>
+		<Category id ="4">
+			<Category> Electronics</Category>
+			<ItemName>Laptop</ItemName>
+			<ItemID>102</ItemID>
+			<Brand>CompuBrand</Brand>
+			<Price>1099.99</Price>
+			<VariationID>102-B</VariationID>
+			<Color>Space Gray</Color>
+			<VariationDetails> Storage: 512GB</VariationDetails>
+		</Category>
+		<Category id ="5">
+			<Category> Home Appliances</Category>
+			<ItemName>Refrigerator</ItemName>
+			<ItemID>201</ItemID>
+			<Brand>HomeCool</Brand>
+			<Price>899.99</Price>
+			<VariationID>201-A</VariationID>
+			<Color>Stainless Steel</Color>
+			<VariationDetails> Capacity: 20 cu ft</VariationDetails>
+		</Category>
+		 <Category id ="6">
+			<Category> Home Appliances</Category>
+			<ItemName>Refrigerator</ItemName>
+			<ItemID>201</ItemID>
+			<Brand>HomeCool</Brand>
+			<Price>899.99</Price>
+			<VariationID>201-B</VariationID>
+			<Color>Color: White</Color>
+			<VariationDetails> Capacity: 18 cu ft</VariationDetails>
+		</Category>
+		<Category id ="7">
+			<Category> Home Appliances</Category>
+			<ItemName>Washing Machine</ItemName>
+			<ItemID>202</ItemID>
+			<Brand>CleanTech</Brand>
+			<Price>499.99</Price>
+			<VariationID>202-A</VariationID>
+			<Color>Type: Front Load</Color>
+			<VariationDetails> Capacity: 4.5 cu ft</VariationDetails>
+		</Category>
+		<Category id ="8">
+			<Category> Home Appliances</Category>
+			<ItemName>Washing Machine</ItemName>
+			<ItemID>202</ItemID>
+			<Brand>CleanTech</Brand>
+			<Price>499.99</Price>
+			<VariationID>202-B</VariationID>
+			<Color>Type: Top Load</Color>
+			<VariationDetails> Capacity: 5.0 cu ft</VariationDetails>
+		</Category>
+		<Category id ="9">
+			<Category> Clothing</Category>
+			<ItemName>T-Shirt</ItemName>
+			<ItemID>301</ItemID>
+			<Brand>FashionCo</Brand>
+			<Price>19.99</Price>
+			<VariationID>301-A</VariationID>
+			<Color>Color: Blue</Color>
+			<VariationDetails> Size: S</VariationDetails>
+		</Category>
+		<Category id ="10">
+			<Category> Clothing</Category>
+			<ItemName>T-Shirt</ItemName>
+			<ItemID>301</ItemID>
+			<Brand>FashionCo</Brand>
+			<Price>19.99</Price>
+			<VariationID>301-B</VariationID>
+			<Color>Color: Red</Color>
+			<VariationDetails> Size: M</VariationDetails>
+		</Category>
+		<Category id ="11">
+			<Category> Clothing</Category>
+			<ItemName>T-Shirt</ItemName>
+			<ItemID>301</ItemID>
+			<Brand>FashionCo</Brand>
+			<Price>19.99</Price>
+			<VariationID>301-C</VariationID>
+			<Color>Color: Green</Color>
+			<VariationDetails> Size: L</VariationDetails>
+		</Category>
+		<Category id ="12">
+			<Category> Clothing</Category>
+			<ItemName>Jeans</ItemName>
+			<ItemID>302</ItemID>
+			<Brand>DenimWorks</Brand>
+			<Price>49.99</Price>
+			<VariationID>302-A</VariationID>
+			<Color>Color: Dark Blue</Color>
+			<VariationDetails> Size: 32</VariationDetails>
+		</Category>
+		<Category id ="13">
+			<Category> Clothing</Category>
+			<ItemName>Jeans</ItemName>
+			<ItemID>302</ItemID>
+			<Brand>DenimWorks</Brand>
+			<Price>49.99</Price>
+			<VariationID>302-B</VariationID>
+			<Color>Color: Light Blue</Color>
+			<VariationDetails> Size: 34</VariationDetails>
+		</Category>
+		<Category id ="14">
+			<Category> Books</Category>
+			<ItemName>Fiction Novel</ItemName>
+			<ItemID>401</ItemID>
+			<Brand>-</Brand>
+			<Price>14.99</Price>
+			<VariationID>401-A</VariationID>
+			<Color>Format: Hardcover</Color>
+			<VariationDetails> Language: English</VariationDetails>
+		</Category>
+		<Category id ="15">
+			<Category> Books</Category>
+			<ItemName>Fiction Novel</ItemName>
+			<ItemID>401</ItemID>
+			<Brand>-</Brand>
+			<Price>14.99</Price>
+			<VariationID>401-B</VariationID>
+			<Color>Format: Paperback</Color>
+			<VariationDetails> Language: Spanish</VariationDetails>
+		</Category>
+		<Category id ="16">
+			<Category> Books</Category>
+			<ItemName>Non-Fiction Guide</ItemName>
+			<ItemID>402</ItemID>
+			<Brand>-</Brand>
+			<Price>24.99</Price>
+			<VariationID>402-A</VariationID>
+			<Color>Format: eBook</Color>
+			<VariationDetails> Language: English</VariationDetails>
+		</Category>
+		<Category id ="17">
+			<Category> Books</Category>
+			<ItemName>Non-Fiction Guide</ItemName>
+			<ItemID>402</ItemID>
+			<Brand>-</Brand>
+			<Price>24.99</Price>
+			<VariationID>402-B</VariationID>
+			<Color>Format: Paperback</Color>
+			<VariationDetails> Language: French</VariationDetails>
+		</Category>
+		<Category id ="18">
+			<Category> Sports Equipment</Category>
+			<ItemName>Basketball</ItemName>
+			<ItemID>501</ItemID>
+			<Brand>SportsGear</Brand>
+			<Price>29.99</Price>
+			<VariationID>501-A</VariationID>
+			<Color>Size: Size 7</Color>
+			<VariationDetails> Color: Orange</VariationDetails>
+		</Category>
+		<Category id ="19">
+			<Category> Sports Equipment</Category>
+			<ItemName>Tennis Racket</ItemName>
+			<ItemID>502</ItemID>
+			<Brand>RacketPro</Brand>
+			<Price>89.99</Price>
+			<VariationID>502-A</VariationID>
+			<Color>Material: Graphite</Color>
+			<VariationDetails> Color: Black</VariationDetails>
+		</Category>
+		<Category id ="20">
+			<Category> Sports Equipment</Category>
+			<ItemName>Tennis Racket</ItemName>
+			<ItemID>502</ItemID>
+			<Brand>RacketPro</Brand>
+			<Price>89.99</Price>
+			<VariationID>502-B</VariationID>
+			<Color>Material: Aluminum</Color>
+			<VariationDetails> Color: Silver</VariationDetails>
+		</Category>
+	</CUNYMart>
+ 
+ 
+ 
+ 
+```{r}
+ 
+XmlUrl <- getURL('https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/week7.xml')
+data_XML <- XmlUrl %>%
+  xmlParse() %>%
+  xmlRoot()
+data_XML
+
+```
+```{r}
+XmlUrl <- getURL('https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/week7.xml')
+data_XML <- XmlUrl %>%
+  xmlParse() %>%
+  xmlRoot() %>%
+  xmlToDataFrame(stringsAsFactors = FALSE)
+data_XML
+```
+
+```{r}
+names(data_XML)[1] <- 'catagory'
+names(data_XML)[2] <-'itemName'
+names(data_XML)[3] <- 'itemID'
+names(data_XML)[4] <- 'brand'
+names(data_XML)[5] <- 'price'
+names(data_XML)[6] <- 'variationID'
+names(data_XML)[7] <- 'color'
+names(data_XML)[8] <- 'variationDetails'
+data_HTML
+```
+
+
+  
+```{r}
+data <- na.omit(data_XML) %>%  
+mutate(color = na_if(color,'')) %>%
+fill(color, .direction = 'down') %>%
+mutate(variationDetails = str_replace(variationDetails, 'Size: S','Storage: 64GB'),
+variationDetails = str_replace(variationDetails, 'Size: M','Storage: 64GB')) %>%
+  
+group_by(itemName) 
+data
+```
+
+```{r}
+data <- data %>%
+  gather('Item','product', 2:3) %>%
+  spread(Item, product) 
+data
+```
+The pros and cons of each format: 
+
+It is possible to load each file from the remote source but RCurl was used for HTML and XML files and the JSON file was imported directly with the JSON function. Also, each file is loaded in a slightly different way and requires some manual effort to create a data frame. The HTML file needs to be converted to numbers. It had to be converted from a wide to a long format and unnested from there. The XML file was automatically imported as an XML object. Had to extract data using xmlParse, xmlRoot,and xmlToDataFrame. These three data frames are almost identical. There is a difference when parsing numeric values from source files to R data frames. The html_table function from the package automatically parses numbers as numeric values and must use xmlToDataFrame in XML.
+ 
+ 
+
+
+
+ 
+ 
+ 

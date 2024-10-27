@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/1235811/e2c549a6db3746028dba1cb4a46b7417
+bundleId: https://api.rpubs.com/api/v1/document/1235811/e2c549a6db3746028dba1cb4a46b7417
+url: http://rpubs.com/asadny82/1235811
+version: 1

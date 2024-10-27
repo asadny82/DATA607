@@ -37,7 +37,7 @@ mysqldbTBConn = dbConnect(RMySQL::MySQL(),
                             host= 'localhost',
                             port=3306,
                             user='root',
-                            password='root')
+                            password='')
 dbListTables(mysqldbTBConn)
 
 ```

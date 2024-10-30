@@ -56,4 +56,32 @@ CREATE TABLE `project3`.`respondents` (
   `age` INT NULL,
   PRIMARY KEY (`respondent_id`));
 
+CREATE TABLE `project3`.`interestareas` (
+  `interest_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `interest_area` VARCHAR(45) NULL,
+  PRIMARY KEY (`interest_id`));
 
+CREATE TABLE `project3`.`softskills` (
+  `soft_skill_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `soft_skill` VARCHAR(45) NULL,
+  PRIMARY KEY (`soft_skill_id`));
+CREATE TABLE `project3`.`programminglanguages` (
+  `language_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `language` VARCHAR(45) NULL,
+  PRIMARY KEY (`language_id`));
+
+CREATE TABLE `project3`.`learningresources` (
+  `resource_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `resource` VARCHAR(45) NULL,
+  PRIMARY KEY (`resource_id`));
+
+CREATE TABLE `project3`.`valuableskills` (
+  `valuable_skill_id` INT NOT NULL,
+  `respondent_id` INT NULL,
+  `skill_rank` INT NULL,
+  `skill_name` VARCHAR(45) NULL,
+  PRIMARY KEY (`valuable_skill_id`));

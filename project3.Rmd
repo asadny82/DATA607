@@ -49,6 +49,11 @@ CREATE TABLE `project3`.`experience` (
   PRIMARY KEY (`experience_id`));
 
 
-
+CREATE TABLE `project3`.`respondents` (
+  `respondent_id` INT NOT NULL,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
+  `age` INT NULL,
+  PRIMARY KEY (`respondent_id`));
 
 

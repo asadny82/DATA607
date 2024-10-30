@@ -85,3 +85,5 @@ CREATE TABLE `project3`.`valuableskills` (
   `skill_rank` INT NULL,
   `skill_name` VARCHAR(45) NULL,
   PRIMARY KEY (`valuable_skill_id`));
+
+

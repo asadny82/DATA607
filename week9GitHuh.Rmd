@@ -1,0 +1,177 @@
+---
+title: "Week 9 TidyVerse/GitHub CREATE assignment"
+author: "Md Asaduzzaman"
+output:
+  pdf_document: default
+  rmarkdown::html_vignette: default
+vignette: "%\\VignetteIndexEntry{Week 9 TidyVerse/GitHub CREATE assignment} %\\VignetteEngine{knitr::rmarkdown}
+  %\\vignetteEncoding{UTF-8}\n"
+---
+ 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  comment="#>"
+  )
+``` 
+
+```{r}
+library(phylotypr)
+```
+
+```{r}
+library(purrr)
+```
+
+# ```{r}
+# usethis::use_vignette("Week_9_TidyVerse_GitHub_CREATE_assignment")
+# ```
+
+<!-- ```{r setup, include=FALSE} -->
+<!-- knitr::opts_chunk$set(echo = TRUE) -->
+<!-- ``` -->
+
+## R Markdown
+
+<!-- ```{r} -->
+<!-- help(package="dplyr") -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- help(package= "tidyverse") -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- help(package="data.table") -->
+<!-- ``` -->
+
+<!-- # ```{r setup} -->
+<!-- # library(inhouseCalc) -->
+<!-- # ``` -->
+
+<!-- ```{r} -->
+<!-- vignette(package="Lahman") -->
+<!-- ``` -->
+ 
+ 
+ 
+#
+Your task here is to Create an Example.  Using one or more TidyVerse packages, and any dataset from fivethirtyeight.com or Kaggle, create a programming sample “vignette” that demonstrates how to use one or more of the capabilities of the selected TidyVerse package with your selected dataset. (25 points)
+
+Later, you'll be asked to extend an existing vignette.  Using one of your classmate’s examples (as created above), you'll then extend his or her example with additional annotated code. (15 points)
+
+You should clone the provided repository.  Once you have code to submit, you should make a pull request on the shared repository.  You should also update the README.md file with your example.
+
+After you’ve created your vignette, please submit your GitHub handle name in the submission link provided below. This will let your instructor know that your work is ready to be peer-graded.
+
+You should complete your submission on the schedule stated in the course syllabus.
+#
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(readr)
+```
+
+ 
+
+```{r}
+library(devtools)
+```
+
+# Data source:
+T he data source are kaggle website.
+https://www.kaggle.com/datasets/tunguz/college-majors
+
+```{r}
+dataset <- read_csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/Week%209_TidyVerse_GitHub_CREATE%20assignment.csv")
+dataset
+```
+ 
+
+
+
+The tibble function use for better visualization of the dataset, and present it as a table.
+
+```{r}
+as_tibble(dataset)
+```
+
+# glimpse functions to get a look at the dataset.
+
+```{r}
+glimpse(dataset)
+```
+
+# use colnames function to see all the colunms in the data set.
+
+```{r}
+colnames(dataset)
+```
+
+#select the columns from dataset
+```{r}
+dataset <- dataset |> select( Major, Unemployed, Employed_full_time_year_round, Unemployment_rate,Major_category)
+tibble(dataset)
+```
+#run the quire group by to check the data is tidy
+
+```{r}
+dataset1 <- dataset %>%  
+  group_by(Unemployment_rate)%>%
+  summarise(mean_Unemployment_rate = mean(Unemployment_rate))
+dataset1
+```
+
+
+# take 20 top Unemployment_rate data and plot shows the top Unemployment_rate
+
+
+```{r}
+dataset <- dataset %>% arrange(desc(Unemployment_rate)) %>% head(20)
+
+ggplot(dataset, aes(x = reorder(Major, Unemployment_rate), y = Unemployment_rate)) +
+  geom_bar(stat = "identity", fill = "red") +
+  labs(title = "Top 20 College Majors with \n highest Unemployment_rate",
+       x = "Major",
+       y = "Unemployment Rate") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 1)) +
+  coord_flip()
+```
+
+#ptol for the Unemployment_rate by Major_category.
+
+
+```{r}
+ggplot(dataset, aes(x = reorder(Major, Unemployment_rate), y = Major_category)) +
+  geom_bar(stat = "identity", fill = "red") +
+  labs(title = "Major_category of Majors",
+       x = "Major",
+       y = "Major_category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 0.5)) +
+  coord_flip()
+```
+
+
+#Top 20 Employed_full_time_year_round of the major.
+#BUSINESS MANAGEMENT AND ADMINISTRATION is the top.
+
+
+```{r}
+dataset2 <-dataset %>% arrange(desc(Employed_full_time_year_round)) %>% head(20)
+
+ggplot(dataset2, aes(x = reorder(Major, Employed_full_time_year_round), y = Employed_full_time_year_round)) +
+  geom_bar(stat = "identity", fill = "green", width = 0.5) +  
+  labs(title = "Top 20 Number of Employed_full_time_year_round",
+       x = "Major",
+       y = "Employed_full_time_year_round") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 2, hjust = 1)) +
+  coord_flip() 
+```
+

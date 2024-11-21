@@ -1,0 +1,533 @@
+---
+title: "Sentiment Analysis"
+author: "Md Asaduzzaman"
+date: "2024-11-18"
+output: html_document
+---
+#
+
+Instructions
+In Text Mining with R, Chapter 2 looks at Sentiment Analysis.  In this assignment, you should start by getting the primary example code from chapter 2 working in an R Markdown document.  You should provide a citation to this base code.  You’re then asked to extend the code in two ways:
+
+Work with a different corpus of your choosing, and
+Incorporate at least one additional sentiment lexicon (possibly from another R package that you’ve found through research).
+As usual, please submit links to both an .Rmd file posted in your GitHub repository and to your code on rpubs.com.  You make work on a small team on this assignment.
+
+#
+ I will analyze a sentiment of the Harry Potter series written by. Rowling. We want to know how the words in each chapter are associated with positive or negative feelings using different dictionaries. Bing, NRC, afinn, and other variants created with Loughran dictionaries.
+ 
+ The three general-purpose lexicons are:
+ • AFINN from Finn Årup Nielsen
+ • Bing from Bing Liu and collaborators
+ • NRC from Saif Mohammad and Peter Turney
+ 
+# Sentiment asalysis with tidy data
+# Word and document analysis with tf-idf
+# Relation between words
+# Converting to and from non-tidy formate.
+#Topic modeling
+
+
+
+
+#add library
+
+```{r}
+library(tidytext)
+library(janeaustenr)
+library(dplyr)
+library(stringr)
+library(wordcloud)
+library(reshape2)
+library(harrypotter)
+library(httr)  
+library(readtext)
+library(textdata)
+library(reshape2)
+library(tidyr)
+library(ggplot2)
+library(wordcloud)
+library(wordcloud2)
+library(gutenbergr)
+library(harrypotter)
+library(devtools)
+library(tibble)
+library(sos)
+```
+
+ 
+
+# sentiment
+ 
+```{r}
+sentiments
+```
+
+# get specific sentiment lexicons of afinn
+
+```{r}
+get_sentiments("afinn")
+```
+
+
+# get specific sentiment lexicons of bing
+
+```{r}
+get_sentiments("bing")
+```
+
+# get specific sentiment lexicons of nrc
+
+```{r}
+get_sentiments("nrc")
+```
+
+# Sentiment Analysis with group_by
+
+```{r}
+ tidy_books <- austen_books() %>%
+ group_by(book) %>%
+ mutate(linenumber = row_number(),
+ chapter = cumsum(str_detect(text, regex("^chapter [\\divxlc]",
+ ignore_case = TRUE)))) %>%
+ ungroup() %>%
+ unnest_tokens(word, text)
+tidy_books
+```
+
+# austen   best know books.
+
+```{r}
+ austen_books() %>%
+  distinct(book)
+
+```
+# Identify the line number and use tidyverse function group_by
+```{r}
+original_books <- austen_books()%>%
+  group_by(book)%>%
+  mutate(line= row_number())%>%
+  ungroup()
+original_books
+```
+
+# make each single word a token
+
+```{r}
+tidy_books <-original_books %>%
+  unnest_tokens(word, text)
+tidy_books
+```
+
+#remove stopwords usning anti_join function
+```{r}
+match_stop_word <-tidy_books %>%
+  anti_join(get_stopwords())
+match_stop_word
+```
+# calculate word frequency and return sort order.
+```{r}
+match_stop_word %>%
+  count(word, sort= TRUE)
+  
+```
+
+# Word clouds
+```{r interactive word cloud, fig.width=10}
+ 
+match_stop_word %>%
+  count(word, sort=TRUE) %>%
+  head(100) %>%
+  wordcloud2(size = 0.4, shape = 'triangle-forward',
+             color = c("streeblue","firebrick","darkorchid"),
+             backgroundColor = "green")
+
+
+```
+
+# non-interactive word cloud
+```{r basic word cloud, fig.height=8}
+match_stop_word %>%
+  count(word)%>%
+  with(wordcloud::wordcloud(word,n,max.words = 100))
+```
+
+# positive word in the bing dictionary
+
+```{r}
+positive <- get_sentiments("bing") %>%
+  filter(sentiment == "positive")
+positive
+```
+
+#count positive word in Emma
+
+```{r}
+tidy_books %>%
+  filter(book == "Emma") %>%
+  semi_join(positive)%>%
+  count(word, sort=TRUE)
+```
+
+# Count negative and positive words of 80 lines of text.
+```{r}
+bing <-get_sentiments("bing")
+ janeaustensentiment <- tidy_books %>%
+ inner_join(bing) %>%
+ count(book, index = line %/% 80, sentiment) %>%
+ spread(sentiment, n, fill = 0) %>%
+ mutate(sentiment = positive - negative)
+janeaustensentiment
+ 
+```
+# visualize 
+positive =green and negative=red
+
+```{r sentiment score}
+janeaustensentiment %>%
+  ggplot(aes(index, sentiment,))+
+  geom_col(show.legend = FALSE, fill="cadetblue")+
+  geom_col(data= .%>%filter(sentiment<0),show.legend = FALSE, fill="firebrick")+
+  geom_hline(yintercept = 0, color="goldenrod")+
+  facet_wrap(~book,ncol=2,scales="free_x")
+```
+
+#Most common positive and negative  words
+```{r}
+bing_word_counts <-tidy_books %>%
+  inner_join(bing)%>%
+  count(word,sentiment, sort=TRUE)
+bing_word_counts
+```
+
+
+#  Sentiment Analysis with inner join
+
+```{r}
+ nrcjoy <- get_sentiments("nrc") %>%
+ filter(sentiment == "joy")
+ tidy_books %>%
+ filter(book == "Emma") %>%
+ inner_join(nrcjoy) %>%
+ count(word, sort = TRUE)
+```
+
+ 
+
+# make a plot of sentiment scores against the index on the x-axis that keeps track of narrative time in sections of text 
+
+```{r}
+ 
+ ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
+ geom_col(show.legend = FALSE) +
+ facet_wrap(~book, ncol = 2, scales = "free_x")
+```
+
+# Now Comparing the Three Sentiment Dictionaries
+
+```{r}
+  pride_prejudice <- tidy_books %>%
+ filter(book == "Pride & Prejudice")
+ pride_prejudice
+```
+
+#word in Emma matching with AFINN
+
+```{r}
+emma_afin <- tidy_books %>%
+  filter(book=="Emma")%>%
+  anti_join(get_stopwords())%>%
+  inner_join(get_sentiments("afinn"))
+emma_afin
+```
+# count 
+```{r}
+emma_afin %>%
+  count(word,sort=TRUE)
+```
+#calculate sentiment
+#make Sections
+```{r}
+emma_afinn_sentiment <-emma_afin %>%
+  mutate(word_count=1:n(),
+         index=word_count %/%80)%>%
+  group_by(index)%>%
+  summarize(sentiment=sum(value))
+emma_afinn_sentiment
+```
+
+#visualize 
+```{r emma word cloud}
+emma_afin %>%
+  mutate(word_count=1:n(),
+         index=word_count %/%80)%>%
+  filter(index==104)%>%
+  count(word, sort=TRUE)%>%
+  with(wordcloud::wordcloud(word,n,rot.per=.3))
+
+emma_afin%>%
+  mutate(word_count=1:n(),
+         index=word_count %/%80)%>%
+  filter(index==104)%>%
+  count(word, sort=TRUE)%>%
+  wordcloud2(size= 0.4,shape='diamond',
+             backgroundColor = "darkseagreen")
+
+```
+
+#visualize
+```{r emma afinn}
+emma_afinn_sentiment %>%
+  ggplot(aes(index,sentiment))+
+  geom_col(aes(fill=cut_interval(sentiment,n=5)))+
+  geom_hline(yintercept = 0,color="forestgreen",linetype="dashed")+
+  scale_fill_brewer(palette = "RdBu",guide=FALSE)+
+  theme(panel.background =element_rect(fill="grey"),
+        plot.background = element_rect(fill="grey"),
+        panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank())+
+          labs(title = "Afinn sentiment analysis of Emma")
+          
+
+```
+# boxplot
+```{r}
+emma_afin %>%
+  mutate(word_count=1:n(),
+         index=as.character(word_count %/%80))%>%
+  filter(index==10 |index==104 |index==105)%>%
+  ggplot(aes(value,index))+
+  geom_boxplot()+
+  geom_jitter()+
+  coord_flip()+
+  labs(y="section",x="Afinn")
+```
+
+#  inner_join() to calculate the sentiment
+
+```{r}
+afinn <- get_sentiments("afinn")
+ afinn <- pride_prejudice %>%
+ inner_join(afinn) %>%
+ group_by(index = line %/% 80) %>%
+ summarise(sentiment = sum(value)) %>%
+ mutate(method = "AFINN")
+
+bing_and_nrc <- bind_rows(
+ pride_prejudice %>%
+ inner_join(bing) %>%
+ mutate(method = "Bing et al."),
+ pride_prejudice %>%
+inner_join(get_sentiments("nrc") %>%
+filter(sentiment %in% c("positive","negative")))%>%
+ mutate(method = "NRC")) %>%
+ count(method, index = line %/% 80, sentiment) %>%
+ spread(sentiment, n, fill = 0) %>%
+ mutate(sentiment = positive - negative)
+
+```
+# Make a plot to visualize net sentiment of positive - negative.
+
+```{r}
+bind_rows(afinn,
+ bing_and_nrc) %>%
+ ggplot(aes(index, sentiment, fill = method)) +
+ geom_col(show.legend = FALSE) +
+ facet_wrap(~method, ncol = 1, scales = "free_y")
+```
+ 
+
+# count the nrc sentiments of positive and negative.
+
+```{r}
+get_sentiments("nrc") %>%
+ filter(sentiment %in% c("positive",
+ "negative")) %>%
+ count(sentiment)
+
+```
+
+# # count the bing sentiments of positive and negative.
+
+```{r}
+get_sentiments("bing") %>% 
+  count(sentiment)
+```
+
+# Most Common Positive and Negative Words
+
+```{r}
+bing_word_counts <- tidy_books %>%
+ inner_join(get_sentiments("bing")) %>%
+ count(word, sentiment, sort = TRUE) %>%
+ ungroup()
+ bing_word_counts
+```
+
+# Plot  that contribute to positive and negative sentiment in Jane Austen’s Snovels
+
+```{r}
+ bing_word_counts %>%
+ group_by(sentiment) %>%
+ top_n(10) %>%
+ ungroup() %>%
+ mutate(word = reorder(word, n)) %>%
+ ggplot(aes(word, n, fill = sentiment)) +
+ geom_col(show.legend = FALSE) +
+ facet_wrap(~sentiment, scales = "free_y") +
+ labs(y = "Contribution to sentiment",
+ x = NULL) +
+ coord_flip()
+```
+
+#custom stop words
+```{r}
+custom_stop_words <- bind_rows(data_frame(word = c("miss"),
+                                          lexicon = c("custom")),
+                               stop_words)
+ custom_stop_words
+```
+
+# The most common words in Jane Austen’s novels
+
+```{r}
+ tidy_books %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
+```
+
+#Most common positive and negative words in Jane Austen’s novels
+
+```{r}
+ tidy_books %>%
+ inner_join(get_sentiments("bing")) %>%
+ count(word, sentiment, sort = TRUE) %>%
+ acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+ comparison.cloud(colors = c("gray20", "gray80"),
+ max.words = 100)
+```
+
+# Looking at Units Beyond Just Words
+
+```{r}
+PandP_sentences <- data_frame(text = prideprejudice) %>%
+ unnest_tokens(sentence, text, token = "sentences")
+
+ PandP_sentences$sentence[2]
+```
+
+# 
+
+```{r}
+ austen_chapters <- austen_books() %>%
+ group_by(book) %>%
+ unnest_tokens(chapter, text, token = "regex",
+ pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
+ ungroup()
+ austen_chapters %>%
+ group_by(book) %>%
+ summarise(chapters = n())
+```
+
+```{r}
+ bingnegative <- get_sentiments("bing") %>%
+ filter(sentiment == "negative")
+ wordcounts <- tidy_books %>%
+ group_by(book) %>%
+ summarize(words = n())
+ 
+
+```
+
+```{r}
+ tidy_books %>%
+ semi_join(bingnegative) %>%
+ group_by(book) %>%
+ summarize(negativewords = n()) %>%
+ left_join(wordcounts, by = c("book")) %>%
+ mutate(ratio = negativewords/words) %>%
+ top_n(1) %>%
+ ungroup()
+```
+
+
+Analysis:
+
+Now, we will obtain a code example from Chapter 2 of Textmining with R.
+
+```{r}
+devtools::install_github("ropensci/gutenbergr")
+```
+
+ 
+```{r}
+ library(gutenbergr)
+dickens_books <- gutenberg_works(author == 'Dickens, Charles')
+
+dickens_books
+```
+```{r}
+head(dickens_books)
+```
+ 
+ 
+
+```{r}
+glimpse(dickens_books)
+```
+ 
+
+
+#check data tidy
+
+```{r}
+tidydata <- dickens_books %>%
+  gutenberg_download(meta_fields = 'title') %>%
+  group_by(gutenberg_id) %>%
+  mutate(linenumber = row_number()) %>%
+  ungroup() %>%
+  unnest_tokens(word, text)
+```
+#identyfy the line number
+
+```{r}
+line_number <- dickens_books%>%
+  group_by(gutenberg_id) %>%
+  mutate(line = row_number()) %>%
+  ungroup()
+line_number
+```
+
+# Sentiment text Analysis
+# create victor
+
+```{r}
+text <- c("Sentiment text analysis for chapter two -",
+          "Start by getting the primary example code -",
+          "should provide a citation to this base code -",
+          "Incorporate at least one additional sentiment lexicon-",
+          "You make work on a small team on this assignment"
+          )
+text
+```
+#tidy table
+```{r}
+text_df <- tibble(line =1:5, text=text)
+text_df
+```
+
+# Tokenization
+```{r}
+text_df %>%
+  unnest_tokens(word, text)
+```
+
+Source:
+
+#citation:
+
+Robinson, J. S. and D. (n.d.). Welcome to text mining with r: Text mining with R. A Tidy Approach. https://www.tidytextmining.com/ 
+
+Silge, Julia, and David Robinson. Text Mining with R: A Tidy Approach. O’Reilly Media, 2017. 
+

@@ -1,0 +1,419 @@
+---
+title: "final_project"
+author: "Md Asaduzzaman"
+date: "2024-12-14"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Introduction:
+
+According to the CDC, the number of suicides is on the rise. 
+The main objective of this project is to find out these reasons why people want to end their lives.
+When we get to the root of it we find that unhappiness is root cause of the oneself killing. 
+In this project, we will now try to find out where this unhappiness comes from in people.
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggthemes)
+library(stringr)
+library(Hmisc)
+library(ggplot2)
+library(corrplot)
+library(RColorBrewer)
+library(countrycode)
+library(remotes)
+library(caret)
+library("ranger")
+```
+
+ 
+
+```{r}
+suicide_data_from_1985_2001<- read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/suicide_data_from_1985_2001.csv")
+head(suicide_data_from_1985_2001)
+```
+# rename the column of dataframe
+```{r}
+ colnames(suicide_data_from_1985_2001) <- c("country", "year","sex","age","suicides_no","population","Suicide_rate","country.year","HDI.for.year","gdp_for_year","gdp_per_capita","generation")
+```
+
+
+
+#data cleaning
+# Check data type
+
+```{r}
+suicide_data_from_1985_2001[c(1,2,3,4)] <- lapply(suicide_data_from_1985_2001[c(1,2,3,4)],factor)
+suicide_data_from_1985_2001$year <- factor(suicide_data_from_1985_2001$year, ordered = TRUE)
+sapply(suicide_data_from_1985_2001, class)
+```
+
+# remove years from age column
+
+```{r}
+data <- suicide_data_from_1985_2001 %>% mutate(age = str_remove(age,'years'))
+ data <- data %>% mutate(age=str_remove(age," "))
+ head(data$age, n=6)
+ 
+```
+
+
+
+
+
+Through this project, As I will find out the root causes of Suicide which countries where people commit suicide, 
+and what reasons are hidden behind suicide in which country. First, I pull data from kaggle website and add to my github. Finally, I will read data from github.
+
+```{r}
+World_Happiness_Report <-read.csv("https://raw.githubusercontent.com/asadny82/Data607/refs/heads/main/World_Happiness_Report_2015.csv")
+glimpse(World_Happiness_Report)
+```
+
+
+# Now I will rename the columns and change the data to TidyData for hanniness data
+
+```{r}
+happiness_rank_data <- World_Happiness_Report %>%
+  rename(Happyness_Rank = Happiness.Rank, Happiness_Score= Happiness.Score,Life_Expectancy = Health..Life.Expectancy.
+         ,Trust = Trust..Government.Corruption.,Whisker_high=Whisker.high, Whisker_low=Whisker.low, Economy_GDP_per_Capita=Economy..GDP.per.Capita., Country=Country) %>%
+  select(-Whisker_high, -Whisker_low, -'Economy_GDP_per_Capita',-Generosity)%>%
+  group_by(Country)
+head(happiness_rank_data)
+```
+
+
+
+```{r}
+data %>%
+  ggplot(aes(population))+geom_histogram(fill="deepskyblue2",color="navy")+
+  labs(y="Absute Freequency",x="year.")
+```
+
+```{r}
+data %>%
+  ggplot(aes(suicides_no))+geom_histogram(fill="deepskyblue2",color="navy")+
+  labs(y="Absute Freequency",x="suicide nNumber")
+``` 
+
+
+#Frequency distribution for suicide rate
+
+```{r}
+data %>%
+  ggplot(aes(Suicide_rate))+geom_histogram(fill="deepskyblue2",color="navy")+
+  labs(y="Absute Freequency",x="suicide Number")
+```
+
+```{r}
+data %>%
+  ggplot(aes(sex))+geom_bar(fill="deepskyblue2",color="navy")+
+  labs(y="Absute Freequency",x="suicide Number")
+```
+
+Year from 1985 to 2016
+
+```{r}
+Suicide_rate_visualize <- data %>%
+  ggplot(aes(year,Suicide_rate))+
+  geom_point()+
+  geom_smooth(method="lm", se=FALSE)+
+ labs( title="", x="Year", y="Suicidr Rate per 100,000 for year")
+
+Suicide_rate_visualize
+```
+
+#Generation pie chart.
+
+```{r}
+generation_count <- data %>% count(generation)
+pie(generation_count$n,labels = generation_count$generation, redious=1,col = c("orange", "green","yellow","blue"),main="Generation")
+```
+
+
+
+#Suicide rate compare with countries to countries
+
+```{r}
+suicide_data_from_1985_2001 %>% group_by(country) %>% summarise(country_suicide_rate_=sum(suicides_no)*100000/sum(population))%>%top_n(25)%>%
+  ggplot(aes(reorder(country,country_suicide_rate_),country_suicide_rate_))+
+  geom_bar(stat="identity",fill="red",color="navy")+
+  coord_flip()+
+  labs(x="country", y="Suicide rate per 100000 population")+
+  ggtitle("Suicide rates by country")
+
+```
+
+```{r}
+suicide_data_from_1985_2001$continent <- countrycode(sourcevar = suicide_data_from_1985_2001[,"country"],origin = "country.name",destination = "continent")
+
+```
+
+```{r}
+suicide_data_from_1985_2001 %>% group_by(country,continent)%>%
+summarise(avg_suicide_rate=mean(Suicide_rate))%>%
+  ggplot(aes(continent,avg_suicide_rate))+
+  geom_boxplot(fill="red",color="blue")+
+  labs(x="continent",y="Suicide rate per 100000 population")+
+  ggtitle("Suicide rate by continent")
+
+```
+
+# Suicite rate by population size.
+
+```{r}
+suicide_data_from_1985_2001 %>%group_by(country,year)%>%
+  summarise(pop=mean(population),Suicide_rate=sum(suicides_no)*100000/sum(population),pop=sum(pop)) %>%ungroup()%>%
+  group_by(country)%>%
+  summarise(pop=sum(pop),Suicide_rate=mean(Suicide_rate))%>%
+  ggplot(aes(Suicide_rate,pop))+
+  geom_point(fill="red",color="blue")+
+  geom_text(data=. %>%filter(Suicide_rate>35 | pop >40000000),
+            aes(label = country, col=country),
+            position = "dodge")+stat_smooth(method = "lm",color="green",size=1)+
+  theme(legend.position = "none")+
+  labs(x="Suicide rate",y="Population")+
+  ggtitle("suicide Rate by population size")
+```
+
+#Effect of nation wealth on suicide rate.
+
+```{r}
+suicide_data_from_1985_2001 %>% group_by(country)%>%
+  summarise(Suicide_rate=sum(suicides_no)*100000/sum(population),
+            gdp_per_capita=mean(gdp_per_capita),
+            pop=sum(as.numeric(population)))%>%
+  arrange(desc(gdp_per_capita))%>%
+  ggplot(aes(gdp_per_capita,Suicide_rate))+
+  geom_point(fill="red",color="navy")+
+  stat_smooth(method = "lm", color="green",size=1)+
+  geom_text(data=.%>% filter(gdp_per_capita>64000| Suicide_rate>40),aes(gdp_per_capita,Suicide_rate, label = country,col=country))+
+  ggtitle("gdp per capita vs suicide Rate")+
+  theme(legend.position = "none")
+  
+```
+# Suicide rate by age group.
+```{r}
+level_key_age <- c('1'= "5-14 years",'2'="15-24 years",'3'="25-34 years",'4'="35-54 years",'5'="55-74 years",'6'="75+ years")
+suicide_data_from_1985_2001$age <- recode_factor(as.character(suicide_data_from_1985_2001$age),!!!level_key_age)
+
+```
+
+# Suicide rate by age group
+
+```{r}
+suicide_data_from_1985_2001 %>% group_by(age,country) %>%
+  summarise(Suicide_rate=sum(suicides_no)*100000/sum(population))%>%
+  ggplot(aes(age,Suicide_rate))+
+  geom_boxplot(fill="deepskyblue2",col="green")+
+  labs(x="age group",y="Suicide rate")+
+  ggtitle("Suicide Rate by age group")+
+  theme(axis.text.x = element_text(angle=30))
+```
+
+# suicide rate by sex
+
+```{r}
+suicide_data_from_1985_2001 %>% group_by(sex) %>%
+  summarise(Suicide_rate=sum(suicides_no)*100000/sum(population))%>%
+  
+  
+  ggplot(aes(reorder(sex,Suicide_rate),Suicide_rate,fill=sex))+
+           
+  geom_histogram( stat="identity", color="green")+
+   
+  ggtitle("Suicide Rate by sex")+
+  
+  scale_color_manual(values = c("deepskyblue2","navyblue"),
+                     aesthetics = c("color","fill"))+
+                       labs(x="sex",y="Suicide rte 100000 population", fill="sex")
+```
+
+#In the plot we will see how is the happiness rank and happiness score are related. The rankings of national happiness are based on a happiness measurement survey undertaken. Nationally representative samples of respondents are asked to think of a ladder, with the best possible life for them being a 10, and the worst possible life being a 0. They are then asked to rate their own current lives on that 0 to 10 scale.[16] The report correlates the life evaluation results with various life factors. The survey says happiness score and happiness rank are inversely proportional.
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Happyness_Rank, Happiness_Score))+
+  geom_point()+
+  geom_smooth(method="lm", se=FALSE)+
+  labs(title = "", x = "Happyness_Rank", y = "Happiness_Score")
+
+```
+# In the above plot show the happiness rank and happiness score coorilated
+
+ 
+
+
+
+#Now we will find the happiness score by countries and continents.
+
+At first, I create the vecotor to the countries in the continents.
+
+```{r}
+happiness_rank_data <- World_Happiness_Report %>%
+  mutate(Continent = case_when( 
+  Country %in% c("Afghanistan","Azerbaijan","United Arab Emirates", "Singapore", "Thailand", "Taiwan Province of China", "Qatar","Turkey", "Saudi Arabia", "Kuwait", "Bahrain", "Malaysia", "Uzbekistan", "Japan", "South Korea", "Turkmenistan", "Kazakhstan", "Hong Kong S.A.R., China","Israel", "Philippines", "Jordan", "China", "Pakistan", "Indonesia", "Lebanon", "Vietnam", "Tajikistan", "Bhutan", "Kyrgyzstan", "Nepal", "Mongolia", "Palestinian Territories", "Iran", "Bangladesh", "Myanmar", "Iraq", "Sri Lanka", "Armenia", "India", "Georgia", "Cambodia", "Yemen", "Syria") ~ "Asia",
+  
+  Country %in%  c( "Finland","Switzerland","Norway","Bulgaria", "Denmark", "Iceland", "Netherlands", "Sweden", "Austria", "Ireland", "Germany", "Belgium", "Luxembourg", "United Kingdom", "Czech Republic", "Malta", "France", "Spain", "Slovakia", "Poland", "Italy", "Russia", "Lithuania", "Latvia", "Moldova", "Romania", "Slovenia", "North Cyprus", "Cyprus", "Estonia", "Belarus", "Serbia", "Hungary", "Croatia", "Kosovo", "Montenegro", "Greece", "Portugal", "Bosnia and Herzegovina", "Macedonia", "Albania", "Ukraine") ~ "Europe",
+  
+  
+  Country %in%  c("United States","Canada", "Costa Rica", "Mexico", "Panama","Trinidad and Tobago", "El Salvador", "Belize", "Guatemala", "Jamaica", "Nicaragua", "Dominican Republic", "Honduras", "Haiti") ~ "North America", 
+  
+  
+  Country %in%  c("Chile", "Argentina", "Uruguay", "Colombia", "Ecuador", "Bolivia", "Peru", "Paraguay", "Venezuela","Brazil") ~ "South America",
+  Country %in%  c("New Zealand", "Australia") ~ "Australia",
+  
+  TRUE ~ "Africa")) %>%
+  mutate(Continent = as.factor(Continent)) %>%
+  select(Country, Continent, everything()) 
+
+glimpse(happiness_rank_data)  
+```
+# find the factor for happiness score
+
+```{r}
+happiness_rank_data %>%
+  select(-Happiness.Rank, -Happiness.Score,-Country, -Continent) %>%
+  describe()
+```
+
+# In this bellow visualiztion,find the main factory of happiness.
+
+```{r}
+happiness_Correlation <- cor(happiness_rank_data[c(3:10)])
+corrplot(happiness_Correlation, method = "pie", type = "upper", order = "FPC",
+         col = brewer.pal(n = 7, name = "GnBu"),
+         tl.col = "black", cl.align = "r", cl.ratio = 0.3)
+```
+# In the plot we see the what is related with people happiness.
+
+
+```{r}
+happiness_rank_data %>%
+ ggplot(aes(Continent, Happiness.Score, color = Continent)) +
+  geom_violin() +
+  theme_fivethirtyeight() +
+  theme(legend.position = "none", plot.title = element_text(hjust = 0.5, vjust = 0.3)) +
+  labs(title = "Happiness Score by Continent", 
+       x = " ",
+       y = "Happiness Score")
+```
+
+# family relation
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Family, Happiness.Score)) +
+  geom_point(aes(color = Continent), size = 3, alpha = 0.8) +
+  geom_smooth(aes(color = Continent, fill = Continent), method = "lm", fullrange = TRUE) +
+  facet_wrap(~ Continent) + 
+  theme_fivethirtyeight() +
+  ggtitle("Family")  
+```
+
+ 
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Health..Life.Expectancy., Happiness.Score)) +
+  geom_point(aes(color = Continent), size = 3, alpha = 0.8) +
+  geom_smooth(aes(color = Continent, fill = Continent), method = "lm", fullrange = TRUE) +
+  facet_wrap(~ Continent) + 
+  theme_fivethirtyeight() +
+  ggtitle("Health Life Expectancy.")  
+```
+
+
+
+```{r}
+happiness_rank_data <- World_Happiness_Report %>%
+  mutate(Country= case_when(
+           
+           Country %in%  c("United States") ~"United States" ,
+                      TRUE ~ "United States"))%>%
+  mutate(Country = as.factor(Country))
+
+glimpse(happiness_rank_data)  
+```
+
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Family, Happiness.Score)) +
+  geom_point(aes(color = Country), size = 1, alpha = 0.8) +
+  geom_smooth(aes(color = Country, fill = Country), method = "lm", fullrange = TRUE) +
+  facet_wrap(~Country) + 
+  theme_fivethirtyeight() +
+  ggtitle("Family")   
+ 
+```
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Economy..GDP.per.Capita., Happiness.Score)) +
+  geom_point(aes(color = Country), size = 1, alpha = 0.8) +
+  geom_smooth(aes(color = Country, fill = Country), method = "lm", fullrange = TRUE) +
+  facet_wrap(~Country) + 
+  theme_fivethirtyeight() +
+  ggtitle("Economy..GDP.per.Capita.")  
+```
+
+
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Health..Life.Expectancy., Happiness.Score)) +
+  geom_point(aes(color = Country), size = 1, alpha = 0.8) +
+  geom_smooth(aes(color = Country, fill = Country), method = "lm", fullrange = TRUE) +
+  facet_wrap(~Country) + 
+  theme_fivethirtyeight() +
+  ggtitle("Health..Life.Expectancy.")  
+```
+
+
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Trust..Government.Corruption., Happiness.Score)) +
+  geom_point(aes(color = Country), size = 1, alpha = 0.8) +
+  geom_smooth(aes(color = Country, fill = Country), method = "lm", fullrange = TRUE) +
+  facet_wrap(~Country) + 
+  theme_fivethirtyeight() +
+  ggtitle("Trust..Government.Corruption.")  
+```
+
+```{r}
+happiness_rank_data %>%
+  ggplot(aes(Freedom, Happiness.Score)) +
+  geom_point(aes(color = Country), size = 1, alpha = 0.8) +
+  geom_smooth(aes(color = Country, fill = Country), method = "lm", fullrange = TRUE) +
+  facet_wrap(~Country) + 
+  theme_fivethirtyeight() +
+  ggtitle("Freedom")  
+```
+
+
+
+
+Conclusion:
+ In the research I used two set of data. One  data set was about the suicide survey and another dataset is about the posible reason why people end their fives.In the project I download data from keggle website and upload to  my github repository and read data from there. Then I clean the data and make it tidy. In my analysis, I research who age and gender pepole commit more suicide. Also, I analyses which continent and country people commit more suicide. I have found that large amount of people over age 75+ years and men commit more suicide. There are few reason what make them people unhappy like family relation,economy,freedom and more.
+
+
+ 
+ 
+
+
+ 
+
+
+===================================================source==================================================
+ 
+
+https://www.kaggle.com/datasets/unsdsn/world-happiness/data
